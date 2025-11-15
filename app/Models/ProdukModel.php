@@ -12,6 +12,7 @@ class ProdukModel extends Model
     protected $returnType       = 'array';
     protected $allowedFields    = [
         'nama_produk',
+        'satuan',
         'harga',
         'hpp',
         'margin',

@@ -11,6 +11,7 @@ class ProdukSeeder extends Seeder
         $data = [
             [
                 'nama_produk' => 'Ayam Goreng',
+                'satuan'      => 'Potong',
                 'harga'       => 18000.00,
                 'hpp'         => 12000.00,
                 'margin'      => 6000.00,
@@ -23,6 +24,7 @@ class ProdukSeeder extends Seeder
             ],
             [
                 'nama_produk' => 'Sate Ayam',
+                'satuan'      => 'Porsi',
                 'harga'       => 25000.00,
                 'hpp'         => 17000.00,
                 'margin'      => 8000.00,

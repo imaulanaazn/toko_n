@@ -175,11 +175,11 @@ class Penjualan extends BaseController
             'status'  => 'selesai',
         ]);
 
-        return redirect()->to('/owner/penjualan')->with('success', 'Penjualan berhasil disimpan.');
+        return redirect()->to('/owner/penjualan')->with('success', 'Catatan berhasil disimpan.');
     }
 
     public function batalkan_penjualan($id)
     {
-        return redirect()->to('/owner/penjualan')->with('success', 'Penjualan berhasil dibatalkan.');
+        return redirect()->to('/owner/penjualan')->with('success', 'Catatan berhasil dibatalkan.');
     }
 }
