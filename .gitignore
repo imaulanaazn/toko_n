@@ -1,0 +1,77 @@
+# ========================================
+# CodeIgniter 4 - .gitignore (Recommended)
+# ========================================
+
+# 1. File environment (jangan pernah commit .env produksi!)
+.env
+!.env.example
+
+# 3. Cache & logs (otomatis dibuat oleh CI4)
+writable/cache/*
+!writable/cache/.gitkeep
+writable/debugbar/*
+writable/logs/*
+!writable/logs/.gitkeep
+writable/session/*
+!writable/session/.gitkeep
+writable/uploads/surat/*
+!writable/uploads/surat/.gitkeep
+writable/uploads/lampiran/*
+!writable/uploads/lampiran/.gitkeep
+!writable/uploads/.gitkeep
+
+# 4. Vendor & composer
+/vendor/
+/composer.lock          # optional: hapus baris ini jika ingin commit lock file
+
+# 5. File IDE / editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.buildpath
+.settings/
+nbproject/
+*.tmproj
+Thumbs.db
+.DS_Store
+
+# 6. Testing & coverage
+/tests/_output/
+/tests/_support/_generated/
+/phpunit.xml
+/coverage/
+
+# 7. Public assets yang di-generate (jika ada)
+/public/assets/build/
+/public/assets/dist/
+
+# 8. Node.js / npm (jika pakai frontend tools)
+/node_modules/
+/npm-debug.log
+/yarn-error.log
+/yarn-debug.log
+/package-lock.json
+/yarn.lock
+
+# 9. File backup / temporary
+*.bak
+*.tmp
+*.log
+
+# 10. Spark server file (jika pakai php spark serve)
+/server.php
+
+# 11. File database lokal (jika ada)
+/database.sqlite
+*.db
+
+# ========================================
+# Tips tambahan:
+# - Pastikan kamu commit file .env.example (contoh konfigurasi)
+# - Buat file kosong .gitkeep di folder writable/* agar tetap terdeteksi Git
+# - Jika kamu ingin versi composer.lock yang sama di semua environment,
+#   hapus baris "/composer.lock" di atas.
+# ========================================
