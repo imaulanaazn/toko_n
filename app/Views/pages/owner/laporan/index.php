@@ -20,11 +20,11 @@
                             <span class="mx-1">-</span> <?= date('d/m/Y', strtotime($end)) ?>
                         <?php endif ?>
                     </p>
-                    <button type="button" class="w-full md:w-max! hidden md:inline-block! px-4 py-2 mr-3 font-bold text-center uppercase align-middle transition-all bg-transparent border rounded-lg cursor-pointer border-slate-300! leading-pro text-xs ease-soft-in tracking-tight-soft bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs text-slate-600">Export PDF</button>
+                    <a href="/owner/laporan/cetak?periode=<?= $periode ?>" class="w-full md:w-max! hidden md:inline-block! px-4 py-2 mr-3 font-bold text-center uppercase align-middle transition-all bg-transparent border rounded-lg cursor-pointer border-slate-300! leading-pro text-xs ease-soft-in tracking-tight-soft bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs text-slate-600">Export PDF</a>
                 </div>
             </div>
         </div>
-        <button type="button" class="w-full mt-4 inline-block md:hidden! px-4 py-2 mr-3 font-bold text-center uppercase align-middle transition-all bg-transparent border rounded-lg cursor-pointer border-slate-300! leading-pro text-xs ease-soft-in tracking-tight-soft bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs text-slate-600">Export PDF</button>
+        <a href="/owner/laporan/cetak?periode=<?= $periode ?>" class="w-full mt-4 inline-block md:hidden! px-4 py-2 mr-3 font-bold text-center uppercase align-middle transition-all bg-transparent border rounded-lg cursor-pointer border-slate-300! leading-pro text-xs ease-soft-in tracking-tight-soft bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs text-slate-600">Export PDF</a>
     </div>
 </div>
 

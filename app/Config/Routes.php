@@ -39,6 +39,7 @@ $routes->get('/owner/penjualan/hapus/(:num)', 'Penjualan::hapus_penjualan/$1');
 
 //Laba
 $routes->get('/owner/laporan', 'Laporan::index');
+$routes->get('/owner/laporan/cetak', 'Laporan::cetak_pdf');
 
 $routes->get('/karyawan/dashboard', 'Dashboard::karyawan_dashboard');
 $routes->get('/karyawan/pembelian', 'Pembelian::karyawan_index');

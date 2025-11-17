@@ -11,6 +11,22 @@ class Laporan extends BaseController
     {
         $periode = $this->request->getGet('periode') ?? 'harian';
 
+        $data = $this->getLaporanData($periode);
+
+        return view('pages/owner/laporan/index', $data);
+    }
+
+    public function cetak_pdf()
+    {
+        $periode = $this->request->getGet('periode') ?? 'harian';
+
+        $data = $this->getLaporanData($periode);
+
+        return view('pages/owner/laporan/template_pdf', $data);
+    }
+
+    private function getLaporanData($periode)
+    {
         // Tentukan rentang tanggal
         $range = $this->getDateRange($periode);
 
@@ -94,11 +110,7 @@ class Laporan extends BaseController
         $pengeluaranPaginated = $this->trxPengeluaranModel->getPengeluaranPaginated($periode, 10);
         $pengeluaranPager     = $this->trxPengeluaranModel->pager;
 
-        // ===========================
-        // RETURN KE VIEW
-        // ===========================
-
-        return view('pages/owner/laporan/index', [
+        return [
             'periode'            => $periode,
             'start'              => $start,
             'end'                => $end,
@@ -115,7 +127,7 @@ class Laporan extends BaseController
             'penjualanPager'     => $penjualanPager,
             'dataPengeluaran' => $pengeluaranPaginated,
             'pengeluaranPager'     => $pengeluaranPager
-        ]);
+        ];
     }
 
     public function getTotalOperasional($startDate = null, $endDate = null)
