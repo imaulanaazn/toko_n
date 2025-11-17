@@ -182,4 +182,22 @@ class Penjualan extends BaseController
     {
         return redirect()->to('/owner/penjualan')->with('success', 'Catatan berhasil dibatalkan.');
     }
+
+    public function hapus_penjualan($id)
+    {
+        // Ambil data penjualan
+        $penjualan = $this->penjualanModel->find($id);
+
+        if (!$penjualan) {
+            return redirect()->back()->with('error', 'Data penjualan tidak ditemukan');
+        }
+
+        // Hapus detail penjualan terlebih dahulu
+        $this->penjualanProdukModel->where('id_penjualan', $id)->delete();
+
+        // Hapus transaksi penjualan
+        $this->penjualanModel->delete($id);
+
+        return redirect()->back()->with('success', 'Transaksi penjualan berhasil dihapus');
+    }
 }

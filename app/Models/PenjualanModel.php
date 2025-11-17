@@ -65,10 +65,13 @@ class PenjualanModel extends Model
             GROUP_CONCAT(produk.nama_produk SEPARATOR '|') AS produk_list,
             GROUP_CONCAT(penjualan_produk.jumlah SEPARATOR '|') AS jumlah_list,
             GROUP_CONCAT(penjualan_produk.subtotal SEPARATOR '|') AS subtotal_list,
-            GROUP_CONCAT(penjualan_produk.harga_satuan SEPARATOR '|') AS harga_satuan_list
+            GROUP_CONCAT(penjualan_produk.harga_satuan SEPARATOR '|') AS harga_satuan_list,
+            GROUP_CONCAT(promo.tipe SEPARATOR '|') AS tipe_promo_list,
+            GROUP_CONCAT(promo.nilai SEPARATOR '|') AS nilai_promo_list,
         ")
             ->join("penjualan_produk", "penjualan_produk.id_penjualan = penjualan.id_penjualan", "left")
             ->join("produk", "produk.id_produk = penjualan_produk.id_produk", "left")
+            ->join("promo", "produk.id_promo = promo.id_promo", "left")
             ->where("penjualan.tanggal >=", $start)
             ->where("penjualan.tanggal <=", $end)
             ->groupBy("penjualan.id_penjualan") // WAJIB supaya pagination tidak rusak

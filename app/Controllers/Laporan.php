@@ -37,6 +37,19 @@ class Laporan extends BaseController
             ->selectSum('jumlah')
             ->first()['jumlah'] ?? 0;
 
+        $totalTransaksi = $this->penjualanModel
+            ->where("created_at >=", $start)
+            ->where("created_at <=", $end)
+            ->countAllResults(); // jumlah transaksi penjualan
+
+        $rataRataTransaksi = $totalTransaksi;
+
+        if ($periode == 'mingguan') {
+            $rataRataTransaksi = $totalTransaksi / 7;
+        } else if ($periode == 'bulanan') {
+            $rataRataTransaksi = $totalTransaksi / 30;
+        }
+
         // ===========================
         // 3. Total Penjualan (Omset)
         // ===========================
@@ -84,6 +97,7 @@ class Laporan extends BaseController
         // ===========================
         // RETURN KE VIEW
         // ===========================
+
         return view('pages/owner/laporan/index', [
             'periode'            => $periode,
             'start'              => $start,
@@ -94,6 +108,8 @@ class Laporan extends BaseController
             'totalHPP'           => $totalHPP,
             'labaKotor'          => $labaKotor,
             'labaBersih'         => $labaBersih,
+            'totalTransaksi'     => $totalTransaksi,
+            'rataRataTransaksi'  => $rataRataTransaksi,
             'totalOperasional'   => $totalOperasional,
             'dataPenjualan'      => $penjualanPaginated,
             'penjualanPager'     => $penjualanPager,

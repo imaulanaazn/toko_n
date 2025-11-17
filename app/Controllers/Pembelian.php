@@ -82,4 +82,18 @@ class Pembelian extends BaseController
 
         return redirect()->back()->with('success', 'Pembelian berhasil ditambahkan!');
     }
+
+    public function hapus_pengeluaran($id)
+    {
+        $pengeluaran = $this->trxPengeluaranModel->find($id);
+
+        if (!$pengeluaran) {
+            return redirect()->back()->with('error', 'Data pengeluaran tidak ditemukan');
+        }
+
+        // Hapus data
+        $this->trxPengeluaranModel->delete($id);
+
+        return redirect()->back()->with('success', 'Pengeluaran berhasil dihapus');
+    }
 }

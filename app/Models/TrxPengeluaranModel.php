@@ -55,7 +55,7 @@ class TrxPengeluaranModel extends Model
                 break;
         }
 
-        return $this->select('trx_pengeluaran.*, pengeluaran.nama_pengeluaran AS nama_master, pengeluaran.satuan')
+        return $this->select('trx_pengeluaran.*, pengeluaran.nama_pengeluaran AS nama_master, pengeluaran.satuan, pengeluaran.kategori')
             ->join('pengeluaran', 'pengeluaran.id_pengeluaran = trx_pengeluaran.id_pengeluaran')
             ->where('tanggal_pengeluaran >=', $start)
             ->where('tanggal_pengeluaran <=', $end)
