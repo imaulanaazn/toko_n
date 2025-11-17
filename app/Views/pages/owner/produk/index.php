@@ -39,10 +39,8 @@
                             <?php foreach ($daftar_produk as $produk): ?>
                                 <tr>
                                     <td class="p-2 pl-6 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                                        <div class="flex px-2 py-1">
-                                            <div>
-                                                <img src="<?= $produk['foto'] ?>" class="inline-flex items-center justify-center mr-4 text-sm text-white transition-all duration-200 ease-soft-in-out h-9 w-9 rounded-xl" alt="user1">
-                                            </div>
+                                        <div class="flex flex-col items-center gap-2 px-2 py-1">
+                                            <img src="/uploads/produk/<?= $produk['foto'] ?>" class="inline-flex items-center justify-center text-sm text-white transition-all duration-200 ease-soft-in-out h-10 w-10 aspect-square rounded-lg" alt="Foto Produk">
                                             <div class="flex flex-col justify-center">
                                                 <h6 class="mb-0 text-sm leading-normal"><?= $produk['nama_produk'] ?></h6>
                                             </div>
@@ -91,11 +89,11 @@
                                         <?php endif; ?>
                                     </td>
                                     <td class="p-2 pr-6 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                                        <a href="/owner/produk/detail/<?= $produk['id_produk'] ?>" class="text-xs font-bold uppercase! underline leading-tight text-slate-600"> Detail </a>
+                                        <a href="/owner/produk/detail/<?= $produk['id_produk'] ?>" class="text-xs font-semibold uppercase! underline leading-tight text-slate-600"> Detail </a>
                                         <span class="text-slate-400">|</span>
-                                        <a href="/owner/produk/edit/<?= $produk['id_produk'] ?>" class="text-xs font-bold uppercase! underline leading-tight text-slate-600"> Edit </a>
+                                        <a href="/owner/produk/edit/<?= $produk['id_produk'] ?>" class="text-xs font-semibold uppercase! underline leading-tight text-slate-600"> Edit </a>
                                         <span class="text-slate-400">|</span>
-                                        <a href="/owner/produk/hapus/<?= $produk['id_produk'] ?>" class="text-xs font-bold uppercase! underline leading-tight text-slate-600"> Hapus </a>
+                                        <a href="/owner/produk/hapus/<?= $produk['id_produk'] ?>" class="text-xs font-semibold uppercase! underline leading-tight text-slate-600"> Hapus </a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

@@ -113,8 +113,6 @@ class Produk extends BaseController
             ->where('bahan_produk.id_produk', $id)
             ->findAll();
 
-        // print_r($bahanProduk);
-
         return view('pages/owner/produk/form_edit', [
             'daftar_bahan' => $daftarBahan,
             'daftar_promo' => $daftarPromo,
@@ -209,7 +207,7 @@ class Produk extends BaseController
             'output'    => $output_produksi,
         ]);
 
-        return redirect()->to("/owner/produk/edit/$id");
+        return redirect()->to("/owner/produk/edit/$id")->with('success', 'bahan berhasil ditambahkan.');;
     }
 
     /**
