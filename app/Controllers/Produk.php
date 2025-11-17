@@ -3,21 +3,25 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use CodeIgniter\HTTP\ResponseInterface;
+use App\Libraries\HPPService;
+
 
 class Produk extends BaseController
 {
     public function index()
     {
-        $daftarProduk = $this->produkModel
-            ->select('produk.*, promo.nama_promo, promo.tipe as tipe_promo, promo.nilai, promo.tanggal_mulai, promo.tanggal_selesai, promo.status')
-            ->join('promo', 'produk.id_promo = promo.id_promo', 'left')
-            ->findAll();
+        $keyword = $this->request->getGet('keyword');
 
-        // print_r($daftarProduk);
+        $hppService = new HPPService();
+        $daftarProduk = $this->produkModel->getProdukDetail($keyword);
+
+        foreach ($daftarProduk as $index => $produk) {
+            $daftarProduk[$index]['hpp'] = $hppService->hitungHPP($produk['id_produk']);
+        }
 
         return view('pages/owner/produk/index', [
-            'daftar_produk' => $daftarProduk
+            'daftar_produk' => $daftarProduk,
+            'keyword'       => $keyword
         ]);
     }
 
@@ -167,7 +171,21 @@ class Produk extends BaseController
     }
 
 
-    public function delete($id) {}
+    public function hapus($id)
+    {
+        $produk = $this->produkModel->find($id);
+        if (!$produk) {
+            return redirect()->back()->with('error', 'Produk tidak ditemukan.');
+        }
+
+        // Hapus bahan-bahan terkait produk
+        $this->bahanProdukModel->where('id_produk', $id)->delete();
+
+        // Hapus produk
+        $this->produkModel->delete($id);
+
+        return redirect()->to('/owner/produk')->with('success', 'Produk berhasil dihapus.');
+    }
 
     public function tambah_bahan($id)
     {

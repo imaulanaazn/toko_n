@@ -12,9 +12,9 @@ class ProdukSeeder extends Seeder
             [
                 'nama_produk' => 'Ayam Goreng',
                 'satuan'      => 'Potong',
-                'harga'       => 18000.00,
-                'hpp'         => 12000.00,
-                'margin'      => 6000.00,
+                'harga'       => 5000.00,
+                'hpp'         => 3000.00,
+                'margin'      => 6.00,
                 'produksi_harian' => 195,
                 'deskripsi'   => 'Ayam goreng renyah dengan bumbu khas tradisional.',
                 'id_promo'    => 1, // misal promo id 1 = Diskon Awal Tahun
@@ -25,9 +25,9 @@ class ProdukSeeder extends Seeder
             [
                 'nama_produk' => 'Sate Ayam',
                 'satuan'      => 'Porsi',
-                'harga'       => 25000.00,
-                'hpp'         => 17000.00,
-                'margin'      => 8000.00,
+                'harga'       => 6000.00,
+                'hpp'         => 3000.00,
+                'margin'      => 6.00,
                 'produksi_harian' => 300,
                 'deskripsi'   => 'Sate ayam empuk dengan bumbu kacang gurih.',
                 'id_promo'    => null, // tanpa promo

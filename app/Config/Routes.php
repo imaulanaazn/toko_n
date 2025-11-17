@@ -19,7 +19,7 @@ $routes->get('/owner/produk/tambah', 'Produk::form_tambah');
 $routes->post('/owner/produk/simpan', 'Produk::simpan');
 $routes->get('/owner/produk/edit/(:num)', 'Produk::form_edit/$1');
 $routes->post('/owner/produk/update/(:num)', 'Produk::update/$1');
-$routes->get('/owner/produk/delete/(:num)', 'Produk::delete/$1');
+$routes->get('/owner/produk/hapus/(:num)', 'Produk::hapus/$1');
 
 //Bahan Produk
 $routes->post('/owner/produk/tambah_bahan/(:num)', 'Produk::tambah_bahan/$1');

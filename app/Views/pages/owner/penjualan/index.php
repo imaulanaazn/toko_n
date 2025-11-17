@@ -122,7 +122,7 @@ function countTotal($item)
                                                     <span class="text-xs font-semibold leading-tight text-slate-400"><?= format_rupiah(countTotal($item)['grand_total']) ?></span>
                                                 </td>
                                                 <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                                                    <a href="/owner/penjualan/hapus_produk/<?= $item['id'] ?>" class="text-xs font-bold uppercase! underline leading-tight text-slate-800"> Hapus </a>
+                                                    <a href="/owner/penjualan/hapus_produk/<?= $item['id'] ?>" class="text-xs font-bold uppercase! underline leading-tight text-slate-600"> Hapus </a>
                                                 </td>
                                             </tr>
                                         <?php endforeach ?>
