@@ -42,7 +42,7 @@
 
 <body onload="window.print()">
 
-    <h2>Laporan Keuangan</h2>
+    <h2>Laporan Keuangan Toko N</h2>
     <p><strong>Periode:</strong> <?= ucfirst($periode) ?>
         <br><strong>Dari:</strong> <?= $start ?>
         <br><strong>Sampai:</strong> <?= $end ?>
