@@ -20,7 +20,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png" />
     <link rel="icon" type="image/png" href="../assets/img/favicon.png" />
-    <title>Soft UI Dashboard Tailwind</title>
+    <title>Warung N</title>
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <!-- Font Awesome Icons -->
@@ -44,7 +44,7 @@
         <div class="h-19.5">
             <i class="absolute top-0 right-4 p-4 opacity-0 cursor-pointer fas fa-times text-slate-400 xl:hidden" sidenav-close=""></i>
             <a class="block px-8 py-6 m-0 text-sm whitespace-nowrap text-slate-700" href="javascript:;" target="_blank">
-                <span class="ml-1 font-semibold transition-all duration-200 ease-nav-brand">Toko N</span>
+                <span class="ml-1 font-semibold transition-all duration-200 ease-nav-brand">WARUNG N</span>
             </a>
         </div>
         <hr class="h-px mt-0 bg-transparent bg-gradient-to-r from-transparent via-black/40 to-transparent">
@@ -108,7 +108,7 @@
         <nav class="relative flex flex-wrap items-center justify-between px-0 py-2 mx-6 mt-4 transition-all shadow-none duration-250 ease-soft-in rounded-2xl lg:flex-nowrap lg:justify-start" navbar-main navbar-scroll="true">
             <div class="flex items-center justify-between w-full px-4 py-1 mx-auto flex-wrap-inherit">
                 <nav>
-                    <h6 class="mb-0 font-bold capitalize">Logo</h6>
+                    <h6 class="mb-0 font-bold capitalize">WARUNG N</h6>
                 </nav>
 
                 <div class="menu flex items-center gap-8 hidden lg:flex">
@@ -158,26 +158,10 @@
                                 <script>
                                     document.write(new Date().getFullYear() + ",");
                                 </script>
-                                made with <i class="fa fa-heart"></i> by
-                                <a href="https://www.creative-tim.com" class="font-semibold text-slate-700" target="_blank">Creative Tim</a>
-                                for a better web.
+                                Dibuat dengan <i class="fa fa-heart"></i>
+                                <a href="https://www.creative-tim.com" class="font-semibold text-slate-700" target="_blank"></a>
+                                untuk warung n.
                             </div>
-                        </div>
-                        <div class="w-full max-w-full px-3 mt-0 shrink-0 lg:w-1/2 lg:flex-none">
-                            <ul class="flex flex-wrap justify-center pl-0 mb-0 list-none lg:justify-end">
-                                <li class="nav-item">
-                                    <a href="https://www.creative-tim.com" class="block px-4 pt-0 pb-1 font-normal transition-colors ease-soft-in-out text-sm text-slate-500" target="_blank">Creative Tim</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="https://www.creative-tim.com/presentation" class="block px-4 pt-0 pb-1 font-normal transition-colors ease-soft-in-out text-sm text-slate-500" target="_blank">About Us</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="https://creative-tim.com/blog" class="block px-4 pt-0 pb-1 font-normal transition-colors ease-soft-in-out text-sm text-slate-500" target="_blank">Blog</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="https://www.creative-tim.com/license" class="block px-4 pt-0 pb-1 pr-0 font-normal transition-colors ease-soft-in-out text-sm text-slate-500" target="_blank">License</a>
-                                </li>
-                            </ul>
                         </div>
                     </div>
                 </div>

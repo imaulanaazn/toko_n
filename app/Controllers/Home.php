@@ -6,7 +6,6 @@ class Home extends BaseController
 {
     public function index()
     {
-        // NOT IMPLEMENTED YET
-        // return view('owner/dashboard/index');
+        return redirect()->to($this->session->get('isLoggedIn') ? '/' . $this->session->get('role') . '/dashboard' : '/login');
     }
 }
