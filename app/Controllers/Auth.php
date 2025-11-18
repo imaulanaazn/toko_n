@@ -12,7 +12,7 @@ class Auth extends BaseController
     {
 
         if (session()->get('isLoggedIn')) {
-            return redirect()->to('/dashboard');
+            return redirect()->to($this->role == 'owner' ? '/owner/dashboard' : '/karyawan/dashboard');
         }
 
         return view('pages/auth/form_login');

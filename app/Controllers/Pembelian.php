@@ -7,18 +7,11 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class Pembelian extends BaseController
 {
-    public function admin_index()
+    public function index()
     {
         $pengeluaran = $this->pengeluaranModel->findAll();
-        return view('pages/owner/pembelian/index', [
-            'pengeluaran' => $pengeluaran
-        ]);
-    }
-
-    public function karyawan_index()
-    {
-        $pengeluaran = $this->pengeluaranModel->findAll();
-        return view('pages/karyawan/pembelian/index', [
+        $role = session()->get('role');
+        return view($this->role == 'owner' ? 'pages/owner/pembelian/index' : 'pages/karyawan/pembelian/index', [
             'pengeluaran' => $pengeluaran
         ]);
     }
@@ -36,8 +29,10 @@ class Pembelian extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validation->getErrors());
         }
 
-        if (!$this->request->getPost('jumlah')) {
-            $jumlah = 1;
+        $jumlah = 1;
+
+        if ($this->request->getPost('jumlah')) {
+            $jumlah = $this->request->getPost('jumlah');
         }
 
         // Ambil input

@@ -5,7 +5,7 @@
     <div class="w-full max-w-full px-3 mx-auto mt-0 md:flex-0 shrink-0 md:w-7/12 lg:w-5/12 xl:w-4/12">
         <div class="relative z-0 flex flex-col min-w-0 break-words bg-white border-0 shadow-soft-xl rounded-2xl bg-clip-border">
             <div class="p-6 pb-0 mb-0 text-center bg-white border-b-0 rounded-t-2xl">
-                <h5 class="">Beli Bahan Produksi</h5>
+                <h5 class="">Catat Pengeluaran</h5>
             </div>
 
             <div class="flex-auto p-6">
@@ -16,7 +16,7 @@
                         <input type="date" name="tanggal_pengeluaran" value="<?= date('Y-m-d'); ?>" class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow" placeholder="Nama Bahan">
                     </div>
                     <div class="mb-4">
-                        <label for="0" class="mb-2">Nama Bahan</label>
+                        <label for="0" class="mb-2">Nama Pengeluaran</label>
                         <select id="select-bahan" name="id_pengeluaran" placeholder="Pilih Bahan..." autocomplete="off">
                             <?php foreach ($pengeluaran as $bahan): ?>
                                 <option value="<?= $bahan['id_pengeluaran'] ?>"><?= $bahan['nama_pengeluaran'] ?></option>
@@ -25,11 +25,11 @@
                     </div>
                     <div class="mb-4">
                         <label for="" class="mb-2">Jumlah</label>
-                        <input type="number" name="jumlah" id="jumlah" class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow" placeholder="Jumlah" aria-label="Email">
+                        <input type="number" name="jumlah" id="jumlah" min="1" class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow" placeholder="Jumlah" aria-label="Email">
                     </div>
                     <div class="mb-4">
                         <label for="" class="mb-2">Harga Satuan</label>
-                        <input type="number" name="harga_satuan" id="harga_satuan" class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow" placeholder="Harga Satuan">
+                        <input type="number" name="harga_satuan" id="harga_satuan" required class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow" placeholder="Harga Satuan">
                     </div>
                     <div class="mb-4">
                         <label for="" class="mb-2">Total Harga</label>
@@ -70,7 +70,7 @@
     });
 
     hargaSatuanInput.addEventListener('keyup', () => {
-        const total = jumlahInput.value * hargaSatuanInput.value;
+        const total = (jumlahInput.value || 1) * hargaSatuanInput.value;
         totalhargaInput.value = new Intl.NumberFormat('id-ID', {
             style: 'currency',
             currency: 'IDR',

@@ -55,6 +55,7 @@ abstract class BaseController extends Controller
     protected $penjualanModel;
     protected $penjualanProdukModel;
     protected $validation;
+    protected $role;
 
 
     /**
@@ -82,6 +83,7 @@ abstract class BaseController extends Controller
         $this->penjualanModel = new PenjualanModel();
         $this->penjualanProdukModel = new PenjualanProdukModel();
         $this->validation = \Config\Services::validation();
+        $this->role = session()->get('role');
 
 
         // E.g.: $this->session = service('session');

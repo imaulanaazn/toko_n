@@ -7,7 +7,8 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class Penjualan extends BaseController
 {
-    public function admin_index()
+
+    public function index()
     {
         $id_penjualan = $this->request->getGet('id_trx');
 
@@ -31,7 +32,7 @@ class Penjualan extends BaseController
             } else {
                 // Kalau id_penjualan gak ditemukan
                 session()->setFlashdata('error', 'Transaksi tidak ditemukan.');
-                return redirect()->to(base_url('owner/penjualan'));
+                return redirect()->to($this->role == 'owner' ? '/owner/penjualan' : 'karyawan/penjualan');
             }
         }
 
@@ -40,7 +41,7 @@ class Penjualan extends BaseController
             ->orderBy('nama_produk', 'ASC')
             ->findAll();
 
-        return view('pages/owner/penjualan/index', [
+        return view($this->role == 'owner' ? 'pages/owner/penjualan/index' : 'pages/karyawan/penjualan/index', [
             'daftar_produk'   => $daftarProduk,
             'penjualan_items' => $penjualan_items,
             'penjualan'       => $penjualan,
@@ -127,7 +128,7 @@ class Penjualan extends BaseController
             'grand_total'  => $total_penjualan,
         ]);
 
-        return redirect()->to('/owner/penjualan?id_trx=' . $id)->with('success', 'Produk berhasil ditambahkan.');
+        return redirect()->to($this->role == 'owner' ? '/owner/penjualan?id_trx=' . $id : '/karyawan/penjualan?id_trx=' . $id)->with('success', 'Produk berhasil ditambahkan.');
     }
 
 
@@ -166,7 +167,7 @@ class Penjualan extends BaseController
             'grand_total'  => $total_penjualan,
         ]);
 
-        return redirect()->to('/owner/penjualan?id_trx=' . $id_penjualan)->with('success', 'Produk berhasil dihapus.');
+        return redirect()->to($this->role == 'owner' ? '/owner/penjualan?id_trx=' . $id_penjualan : '/karyawan/penjualan?id_trx=' . $id_penjualan)->with('success', 'Produk berhasil dihapus.');
     }
 
     public function simpan_penjualan($id)
@@ -175,12 +176,12 @@ class Penjualan extends BaseController
             'status'  => 'selesai',
         ]);
 
-        return redirect()->to('/owner/penjualan')->with('success', 'Catatan berhasil disimpan.');
+        return redirect()->to($this->role == 'owner' ? '/owner/penjualan' : '/karyawan/penjualan')->with('success', 'Catatan berhasil disimpan.');
     }
 
     public function batalkan_penjualan($id)
     {
-        return redirect()->to('/owner/penjualan')->with('success', 'Catatan berhasil dibatalkan.');
+        return redirect()->to($this->role == 'owner' ? '/owner/penjualan' : '/karyawan/penjualan')->with('success', 'Catatan berhasil dibatalkan.');
     }
 
     public function hapus_penjualan($id)

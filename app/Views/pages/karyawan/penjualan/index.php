@@ -51,7 +51,7 @@ function countTotal($item)
 
             <div class="flex-auto p-6">
                 <?= view('components/alert') ?> <!-- panggil komponen alert -->
-                <form role="form text-left" action="/owner/penjualan/tambah_produk <?= $id_penjualan ? '?id_trx=' . $id_penjualan : '' ?>" method="POST">
+                <form role="form text-left" action="/karyawan/penjualan/tambah_produk <?= $id_penjualan ? '?id_trx=' . $id_penjualan : '' ?>" method="POST">
                     <input type="text" hidden value="<?= $id_penjualan ?>">
                     <div class="mb-4">
                         <label for="" class="mb-2">Tanggal Penjualan</label>
@@ -121,7 +121,7 @@ function countTotal($item)
                                                 <span class="text-xs font-semibold leading-tight text-slate-400"><?= format_rupiah(countTotal($item)['grand_total']) ?></span>
                                             </td>
                                             <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                                                <a href="/owner/penjualan/hapus_produk/<?= $item['id'] ?>" class="text-xs font-bold uppercase! underline leading-tight text-slate-600"> Hapus </a>
+                                                <a href="/karyawan/penjualan/hapus_produk/<?= $item['id'] ?>" class="text-xs font-bold uppercase! underline leading-tight text-slate-600"> Hapus </a>
                                             </td>
                                         </tr>
                                     <?php endforeach ?>
@@ -135,8 +135,8 @@ function countTotal($item)
                     </div>
                     <form action="">
                         <div class="flex gap-4">
-                            <a href="/owner/penjualan/batal/<?= $id_penjualan ?>" class="inline-block w-full px-6 py-3 mt-4 mb-2 font-bold text-center text-blue-800 uppercase align-middle transition-all bg-transparent border border-solid! border-blue-800! rounded-lg cursor-pointer active:opacity-85 hover:scale-102 hover:shadow-soft-xs leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:border-slate-700">Batal</a>
-                            <a href="/owner/penjualan/simpan/<?= $id_penjualan ?>" class="inline-block w-full px-6 py-3 mt-4 mb-2 font-bold text-center text-white uppercase align-middle transition-all bg-transparent border-0 rounded-lg cursor-pointer active:opacity-85 hover:scale-102 hover:shadow-soft-xs leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 bg-gradient-to-tl from-gray-900 to-slate-800 hover:border-slate-700 hover:bg-slate-700 hover:text-white">Simpan</a>
+                            <a href="/karyawan/penjualan/batal/<?= $id_penjualan ?>" class="inline-block w-full px-6 py-3 mt-4 mb-2 font-bold text-center text-blue-800 uppercase align-middle transition-all bg-transparent border border-solid! border-blue-800! rounded-lg cursor-pointer active:opacity-85 hover:scale-102 hover:shadow-soft-xs leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 hover:border-slate-700">Batal</a>
+                            <a href="/karyawan/penjualan/simpan/<?= $id_penjualan ?>" class="inline-block w-full px-6 py-3 mt-4 mb-2 font-bold text-center text-white uppercase align-middle transition-all bg-transparent border-0 rounded-lg cursor-pointer active:opacity-85 hover:scale-102 hover:shadow-soft-xs leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 bg-gradient-to-tl from-gray-900 to-slate-800 hover:border-slate-700 hover:bg-slate-700 hover:text-white">Simpan</a>
                         </div>
                     </form>
                 </div>
