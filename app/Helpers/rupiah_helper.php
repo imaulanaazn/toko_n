@@ -7,7 +7,7 @@ if (!function_exists('format_rupiah')) {
      * @param bool $with_symbol Default: true (Rp)
      * @return string
      */
-    function format_rupiah($angka, bool $with_symbol = true): string
+    function format_rupiah($angka = 0, bool $with_symbol = true): string
     {
         $result = number_format($angka, 0, ',', '.');
 
