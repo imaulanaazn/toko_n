@@ -22,6 +22,7 @@ $routes->group('owner', ['filter' => 'auth:owner'], function ($routes) {
     $routes->get('produk/edit/(:num)', 'Produk::form_edit/$1');
     $routes->post('produk/update/(:num)', 'Produk::update/$1');
     $routes->get('produk/hapus/(:num)', 'Produk::hapus/$1');
+    $routes->get('produk/detail/(:num)', 'Produk::detail/$1');
 
     //Bahan Produk
     $routes->post('produk/tambah_bahan/(:num)', 'Produk::tambah_bahan/$1');

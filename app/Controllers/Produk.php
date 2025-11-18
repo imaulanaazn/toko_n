@@ -228,4 +228,67 @@ class Produk extends BaseController
 
         return redirect()->to("/owner/produk/edit/$id_produk");
     }
+
+    public function detail($id)
+    {
+        // Ambil detail produk + promo + semua bahan baku dalam 1 query (efisien!)
+        $produk = $this->produkModel->select("
+            produk.*,
+            promo.nama_promo,
+            promo.tipe AS tipe_promo,
+            promo.nilai AS nilai_promo,
+            promo.tanggal_mulai,
+            promo.tanggal_selesai,
+            promo.status AS status_promo,
+            
+            GROUP_CONCAT(pengeluaran.nama_pengeluaran SEPARATOR '||') AS nama_bahan,
+            GROUP_CONCAT(bahan_produk.jumlah SEPARATOR '||') AS jumlah_bahan,
+            GROUP_CONCAT(bahan_produk.output SEPARATOR '||') AS output_produksi,
+            GROUP_CONCAT(pengeluaran.satuan SEPARATOR '||') AS satuan_bahan,
+            GROUP_CONCAT(pengeluaran.harga_satuan SEPARATOR '||') AS harga_bahan_satuan
+        ")
+            ->join('promo', 'promo.id_promo = produk.id_promo', 'left')
+            ->join('bahan_produk', 'bahan_produk.id_produk = produk.id_produk', 'left')
+            ->join('pengeluaran', 'pengeluaran.id_pengeluaran = bahan_produk.id_bahan', 'left')
+            ->where('produk.id_produk', $id)
+            ->groupBy('produk.id_produk')
+            ->first();
+
+        // Jika produk tidak ditemukan
+        if (!$produk) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Produk tidak ditemukan');
+        }
+
+        // Pisahkan bahan baku jadi array yang rapi
+        $bahanList = [];
+        if ($produk['nama_bahan']) {
+            $nama   = explode('||', $produk['nama_bahan']);
+            $jumlah = explode('||', $produk['jumlah_bahan']);
+            $outputProduksi = explode('||', $produk['output_produksi']);
+            $satuan = explode('||', $produk['satuan_bahan']);
+            $harga  = explode('||', $produk['harga_bahan_satuan']);
+
+            for ($i = 0; $i < count($nama); $i++) {
+                $bahanList[] = [
+                    'nama_bahan'      => $nama[$i] ?? '-',
+                    'jumlah'          => $jumlah[$i] ?? '0',
+                    'output_produksi' => $outputProduksi[$i] ?? '0',
+                    'satuan'          => $satuan[$i] ?? '',
+                    'harga_satuan'    => $harga[$i] ?? '0',
+                    'subtotal'        => (float)($harga[$i] ?? 0) * (float)($jumlah[$i] ?? 0),
+                ];
+            }
+        }
+
+        $data = [
+            'title'      => 'Detail Produk - ' . $produk['nama_produk'],
+            'produk'     => $produk,
+            'bahan'      => $bahanList,
+            'promo_aktif' => $produk['status_promo'] === 'aktif'
+                && $produk['tanggal_mulai'] <= date('Y-m-d')
+                && $produk['tanggal_selesai'] >= date('Y-m-d'),
+        ];
+
+        return view('pages/owner/produk/detail', $data);
+    }
 }
