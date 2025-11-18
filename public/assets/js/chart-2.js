@@ -17,30 +17,39 @@ gradientStroke2.addColorStop(0, "rgba(20,23,39,0)"); //purple colors
 new Chart(ctx2, {
   type: "line",
   data: {
-    labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    labels: labels,
     datasets: [
       {
-        label: "Mobile apps",
-        tension: 0.4,
-        borderWidth: 0,
+        label: "Total Penjualan",
+        tension: 0.3,
         pointRadius: 0,
         borderColor: "#cb0c9f",
         borderWidth: 3,
         backgroundColor: gradientStroke1,
         fill: true,
-        data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
+        data: chartPenjualan,
         maxBarThickness: 6,
       },
       {
-        label: "Websites",
-        tension: 0.4,
-        borderWidth: 0,
+        label: "Total Pembelian",
+        tension: 0.3,
         pointRadius: 0,
         borderColor: "#3A416F",
         borderWidth: 3,
         backgroundColor: gradientStroke2,
         fill: true,
-        data: [30, 90, 40, 140, 290, 290, 340, 230, 400],
+        data: chartPengeluaran,
+        maxBarThickness: 6,
+      },
+       {
+        label: "Laba Rugi",
+        tension: 0.3,
+        pointRadius: 0,
+        borderColor: "#828bcaff",
+        borderWidth: 3,
+        backgroundColor: gradientStroke2,
+        fill: true,
+        data: chartLabaBersih,
         maxBarThickness: 6,
       },
     ],
@@ -50,7 +59,8 @@ new Chart(ctx2, {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: false,
+        display: true,
+        position: "bottom"
       },
     },
     interaction: {

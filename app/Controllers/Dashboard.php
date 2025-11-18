@@ -9,8 +9,69 @@ class Dashboard extends BaseController
 {
     public function owner_dashboard()
     {
-        return view('pages/owner/dashboard/index');
+        $bulan = date('m');
+        $tahun = date('Y');
+
+        // Ambil jumlah hari pada bulan ini
+        $jumlahHari = cal_days_in_month(CAL_GREGORIAN, $bulan, $tahun);
+
+        // Inisialisasi array untuk chart
+        $labels = [];
+        $totalPenjualan = array_fill(1, $jumlahHari, 0);
+        $totalPengeluaran = array_fill(1, $jumlahHari, 0);
+        $labaBersih = array_fill(1, $jumlahHari, 0);
+
+        // Generate label tanggal
+        for ($i = 1; $i <= $jumlahHari; $i++) {
+            $labels[] = $i;
+        }
+
+        // =========================
+        // Ambil Penjualan per hari
+        // =========================
+        $penjualan = $this->penjualanModel
+            ->select("DAY(created_at) as hari, SUM(total_harga) as total")
+            ->where("MONTH(created_at)", $bulan)
+            ->where("YEAR(created_at)", $tahun)
+            ->groupBy("DAY(created_at)")
+            ->findAll();
+
+        foreach ($penjualan as $row) {
+            $totalPenjualan[$row['hari']] = (int)$row['total'];
+        }
+
+        // ==========================
+        // Ambil Pengeluaran per hari
+        // ==========================
+        $pengeluaran = $this->trxPengeluaranModel
+            ->select("DAY(created_at) as hari, SUM(total_harga) as total")
+            ->where("MONTH(created_at)", $bulan)
+            ->where("YEAR(created_at)", $tahun)
+            ->groupBy("DAY(created_at)")
+            ->findAll();
+
+        foreach ($pengeluaran as $row) {
+            $totalPengeluaran[$row['hari']] = (int)$row['total'];
+        }
+
+        // =============================
+        // Hitung Laba Bersih per hari
+        // =============================
+        for ($i = 1; $i <= $jumlahHari; $i++) {
+            $labaBersih[$i] = $totalPenjualan[$i] - $totalPengeluaran[$i];
+        }
+
+        // =============================
+        // Kirim ke View
+        // =============================
+        return view('pages/owner/dashboard/index', [
+            'labels'          => json_encode($labels),
+            'chartPenjualan'  => json_encode(array_values($totalPenjualan)),
+            'chartPengeluaran' => json_encode(array_values($totalPengeluaran)),
+            'chartLabaBersih' => json_encode(array_values($labaBersih)),
+        ]);
     }
+
     public function karyawan_dashboard()
     {
         return view('pages/karyawan/dashboard/index');
