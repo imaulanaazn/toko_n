@@ -12,8 +12,8 @@ class ProdukSeeder extends Seeder
             [
                 'nama_produk' => 'Ayam Goreng',
                 'satuan'      => 'Potong',
-                'harga'       => 5000.00,
-                'hpp'         => 3000.00,
+                'harga'       => 6000.00,
+                'hpp'         => 4000.00,
                 'margin'      => 6.00,
                 'produksi_harian' => 195,
                 'deskripsi'   => 'Ayam goreng renyah dengan bumbu khas tradisional.',
@@ -25,8 +25,8 @@ class ProdukSeeder extends Seeder
             [
                 'nama_produk' => 'Sate Ayam',
                 'satuan'      => 'Porsi',
-                'harga'       => 6000.00,
-                'hpp'         => 3000.00,
+                'harga'       => 8000.00,
+                'hpp'         => 5000.00,
                 'margin'      => 6.00,
                 'produksi_harian' => 300,
                 'deskripsi'   => 'Sate ayam empuk dengan bumbu kacang gurih.',
