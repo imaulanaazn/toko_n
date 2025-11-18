@@ -74,6 +74,50 @@ class Dashboard extends BaseController
 
     public function karyawan_dashboard()
     {
-        return view('pages/karyawan/dashboard/index');
+        $periode = $this->request->getGet('periode') ?? 'bulanan';
+        $range = $this->getDateRange($periode);
+
+        $start = $range['start'];
+        $end   = $range['end'];
+
+        $penjualanPaginated = $this->penjualanModel->getPenjualanPaginated($periode, 10);
+        $penjualanPager     = $this->penjualanModel->pager;
+
+        $pengeluaranPaginated = $this->trxPengeluaranModel->getPengeluaranPaginated($periode, 10);
+        $pengeluaranPager     = $this->trxPengeluaranModel->pager;
+
+        return view('pages/karyawan/dashboard/index', [
+            'periode'            => $periode,
+            'start'              => $start,
+            'end'                => $end,
+            'dataPenjualan'      => $penjualanPaginated,
+            'penjualanPager'     => $penjualanPager,
+            'dataPengeluaran'    => $pengeluaranPaginated,
+            'pengeluaranPager'   => $pengeluaranPager
+        ]);
+    }
+
+    private function getDateRange($periode)
+    {
+        switch ($periode) {
+            case 'mingguan':
+                return [
+                    'start' => date('Y-m-d 00:00:00', strtotime('-7 days')),
+                    'end'   => date('Y-m-d 23:59:59'),
+                ];
+
+            case 'bulanan':
+                return [
+                    'start' => date('Y-m-01 00:00:00'),
+                    'end'   => date('Y-m-t 23:59:59'),
+                ];
+
+            case 'harian':
+            default:
+                return [
+                    'start' => date('Y-m-d 00:00:00'),
+                    'end'   => date('Y-m-d 23:59:59'),
+                ];
+        }
     }
 }
