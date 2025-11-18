@@ -172,15 +172,33 @@ class Penjualan extends BaseController
 
     public function simpan_penjualan($id)
     {
+        // Cek apakah penjualan punya item atau tidak
+        $detail = $this->penjualanProdukModel->where('id_penjualan', $id)->countAllResults();
+
+        if ($detail == 0) {
+            return redirect()
+                ->to($this->role == 'owner' ? '/owner/penjualan?id_trx=' . $id : '/karyawan/penjualan?id_trx=' . $id)
+                ->with('error', 'Tambahkan setidaknya 1 produk.');
+        }
+
+        // Jika ada item → update status jadi selesai
         $this->penjualanModel->update($id, [
-            'status'  => 'selesai',
+            'status' => 'selesai',
         ]);
 
-        return redirect()->to($this->role == 'owner' ? '/owner/penjualan' : '/karyawan/penjualan')->with('success', 'Catatan berhasil disimpan.');
+        return redirect()
+            ->to($this->role == 'owner' ? '/owner/penjualan' : '/karyawan/penjualan')
+            ->with('success', 'Catatan berhasil disimpan.');
     }
+
 
     public function batalkan_penjualan($id)
     {
+        // Hapus detail penjualan terlebih dahulu
+        $this->penjualanProdukModel->where('id_penjualan', $id)->delete();
+
+        // Hapus penjualan utama
+        $this->penjualanModel->delete($id);
         return redirect()->to($this->role == 'owner' ? '/owner/penjualan' : '/karyawan/penjualan')->with('success', 'Catatan berhasil dibatalkan.');
     }
 
