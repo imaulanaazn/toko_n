@@ -13,7 +13,7 @@ class Dashboard extends BaseController
         $tahun = date('Y');
 
         // Ambil jumlah hari pada bulan ini
-        $jumlahHari = cal_days_in_month(CAL_GREGORIAN, $bulan, $tahun);
+        $jumlahHari = date('t', strtotime("$tahun-$bulan-01"));
 
         // Inisialisasi array untuk chart
         $labels = [];
