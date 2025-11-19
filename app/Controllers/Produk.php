@@ -207,6 +207,10 @@ class Produk extends BaseController
             'output'    => $output_produksi,
         ]);
 
+        $hppService = new HPPService();
+
+        $hppService->hitungHPP($id);
+
         return redirect()->to("/owner/produk/edit/$id")->with('success', 'bahan berhasil ditambahkan.');;
     }
 

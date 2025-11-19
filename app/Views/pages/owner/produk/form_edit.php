@@ -50,7 +50,7 @@
                             </div>
                             <div class="w-full">
                                 <label for="margin" class="mb-2">Margin (%)</label>
-                                <input type="number" name="margin" id="margin" value="<?= esc($produk['margin']) ?>"
+                                <input type="number" step="0.01" name="margin" id="margin" value="<?= esc($produk['margin']) ?>"
                                     class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full rounded-lg border border-gray-300 bg-white py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none"
                                     placeholder="10%">
                             </div>
@@ -213,7 +213,7 @@
             }
 
             const margin = ((harga - hpp) / hpp) * 100;
-            marginInput.value = margin
+            marginInput.value = Number(margin).toFixed(2);
         }
 
         // Event: Margin changed → update Harga
@@ -230,7 +230,7 @@
 
         // Initial calculation if HPP already filled (from edit form)
         if (hppInput.value) {
-            hitungHargaDariMargin();
+            hitungMarginDariHarga();
         }
 
         gambarInput.addEventListener("change", () => {
@@ -262,11 +262,11 @@
 
         selectBahan.addEventListener('change', (e) => {
             const selectedBahan = daftarBahan.find((bahan) => (bahan.id_pengeluaran == e.target.value));
-            jumlahLabel.innerText = "Jumlah " + (selectedBahan.satuan ? `(${selectedBahan.satuan})` : '');
+            jumlahLabel.innerText = "Jumlah " + (selectedBahan.satuan ? `(${selectedBahan.satuan})` : '(Rp...)');
         })
 
         const selectedBahan = daftarBahan.find((bahan) => (bahan.id_pengeluaran == selectBahan.value));
-        jumlahLabel.innerText = "Jumlah " + (selectedBahan.satuan ? `(${selectedBahan.satuan})` : '');
+        jumlahLabel.innerText = "Jumlah " + (selectedBahan.satuan ? `(${selectedBahan.satuan})` : '(Rp...)');
     });
 </script>
 <?= $this->endSection() ?>

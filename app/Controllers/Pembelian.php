@@ -21,7 +21,7 @@ class Pembelian extends BaseController
         // Validasi input
         $this->validation->setRules([
             'tanggal_pengeluaran' => 'required|valid_date',
-            'harga_satuan'      => 'required|decimal',
+            'jumlah'      => 'required|decimal',
             'id_pengeluaran'    => 'required|decimal',
         ]);
 
@@ -29,17 +29,17 @@ class Pembelian extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validation->getErrors());
         }
 
-        $jumlah = 1;
+        $harga_satuan = 1;
 
-        if ($this->request->getPost('jumlah')) {
-            $jumlah = $this->request->getPost('jumlah');
+        if ($this->request->getPost('harga_satuan')) {
+            $harga_satuan = $this->request->getPost('harga_satuan');
         }
 
         // Ambil input
         $id_pengeluaran  = $this->request->getPost('id_pengeluaran');
         $tanggal_pengeluaran = $this->request->getPost('tanggal_pengeluaran');
-        $jumlah    = $jumlah;
-        $harga     = $this->request->getPost('harga_satuan');
+        $jumlah    = $this->request->getPost('jumlah');
+        $harga     = $harga_satuan;
         $total     = $jumlah * $harga;
         $nama_pengeluaran = $id_pengeluaran;
 
