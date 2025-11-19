@@ -21,15 +21,15 @@ class Database extends Config
 
     /**
      * The default database connection.
-     *
+     *mysql://root:RqVoxYzQPBBLMPsKUTxeOpAPFYZToTzb@metro.proxy.rlwy.net:50443/railway
      * @var array<string, mixed>
      */
     public array $default = [
         'DSN'          => '',
-        'hostname'     => 'localhost',
+        'hostname'     => 'metro.proxy.rlwy.net',
         'username'     => 'root',
-        'password'     => '',
-        'database'     => 'toko_n',
+        'password'     => 'RqVoxYzQPBBLMPsKUTxeOpAPFYZToTzb',
+        'database'     => 'railway',
         'DBDriver'     => 'MySQLi',
         'DBPrefix'     => '',
         'pConnect'     => false,
@@ -41,7 +41,7 @@ class Database extends Config
         'compress'     => false,
         'strictOn'     => false,
         'failover'     => [],
-        'port'         => 3306,
+        'port'         => 50443,
         'numberNative' => false,
         'foundRows'    => false,
         'dateFormat'   => [
