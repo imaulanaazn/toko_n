@@ -10,7 +10,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call('UserSeeder');
         $this->call('PengeluaranSeeder');
-        $this->call('TrxPengeluaranSeeder');
+        // $this->call('TrxPengeluaranSeeder');
         $this->call('PromoSeeder');
         $this->call('ProdukSeeder');
         $this->call('BahanProdukSeeder');
