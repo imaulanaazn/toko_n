@@ -25,7 +25,7 @@
                 </div>
                 <div class="bg-blue-50 p-4 rounded-lg">
                     <p class="text-sm text-blue-600 mb-1!">Margin</p>
-                    <p class="text-xl font-bold text-blue-700 mb-0!">Rp <?= number_format($produk['harga'] * $produk['margin'] / 100) ?></p>
+                    <p class="text-xl font-bold text-blue-700 mb-0!">Rp <?= number_format($produk['harga'] - $produk['hpp']) ?> <span class="text-xs ml-1">(<?= $produk['margin'] ?>%)</span></p>
                 </div>
             </div>
 
