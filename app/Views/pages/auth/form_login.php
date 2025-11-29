@@ -70,9 +70,19 @@
                 <div class="flex flex-wrap -mx-3 -mt-48 md:-mt-56 lg:-mt-48">
                     <div class="w-full max-w-full px-3 mx-auto mt-0 md:flex-0 shrink-0 md:w-7/12 lg:w-5/12 xl:w-4/12">
                         <div class="relative z-0 flex flex-col min-w-0 break-words bg-white border-0 shadow-soft-xl rounded-2xl bg-clip-border">
-                            <div class="p-6 mb-0 text-center bg-white border-b-0 rounded-t-2xl">
+                            <div class="p-6 mb-0 text-center border-b-0 rounded-t-2xl">
                                 <h5>Login ke Warung N</h5>
                             </div>
+                            <?php if (session()->get('isLoggedIn')): ?>
+                                <div>
+                                    <div class="px-6 text-center flex justify-center">
+                                        <?php foreach (session('users') as $user): ?>
+                                            <a href="<?= base_url('/login-as/' . $user['id']) ?>" class="inline-block my-2 px-4 py-2 mx-2 font-semibold text-center uppercase align-middle transition-all bg-transparent border rounded-lg cursor-pointer border-gray-300 leading-pro text-xs ease-soft-in tracking-tight-soft bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs text-slate-600"><?= $user['full_name'] ?></a>
+                                        <?php endforeach ?>
+                                    </div>
+                                </div>
+                                <p class="my-4 text-center">Atau</p>
+                            <?php endif; ?>
                             <div class="flex-auto px-6">
                                 <?php if (session()->getFlashdata('success')): ?>
                                     <div class="alert alert-success">

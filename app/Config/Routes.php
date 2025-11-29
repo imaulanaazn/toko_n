@@ -10,6 +10,8 @@ $routes->get('/login', 'Auth::login');
 $routes->post('/login', 'Auth::loginProcess');
 $routes->get('/logout', 'Auth::logout');
 
+$routes->get('/login-as/(:num)', 'Auth::loginAs/$1');
+
 $routes->group('owner', ['filter' => 'auth:owner'], function ($routes) {
     $routes->get('dashboard', 'Dashboard::owner_dashboard');
     $routes->get('pembelian', 'Pembelian::index');

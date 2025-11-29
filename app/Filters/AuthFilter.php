@@ -25,20 +25,53 @@ class AuthFilter implements FilterInterface
      */
     public function before(RequestInterface $request, $arguments = null)
     {
-        $user = session()->get('user');
-
-        if (!session()->get('isLoggedIn')) {
-            return redirect()->to('/login');
+        // Cek apakah ada session login sama sekali
+        if (!session()->has('isLoggedIn') || !session()->get('isLoggedIn')) {
+            return redirect()->to('/login')->with('error', 'Silakan login terlebih dahulu');
         }
 
-        if (!empty($arguments)) {
-            $requiredRole = $arguments[0];
-            if (session()->get('role') !== $requiredRole) {
-                return redirect()->to('/unauthorized');
+        // Ambil data user yang SEDANG AKTIF (bukan user pertama)
+        $usersStack     = session()->get('users') ?? [];
+        $activeUserId   = session()->get('active_user_id');
+
+        if (empty($usersStack) || $activeUserId === null) {
+            // Session rusak / tidak valid
+            session()->destroy();
+            return redirect()->to('/login')->with('error', 'Sesi tidak valid');
+        }
+
+        // Cari user yang sedang aktif dari stack
+        $activeUser = null;
+        foreach ($usersStack as $u) {
+            if ($u['id'] == $activeUserId) {
+                $activeUser = $u;
+                break;
             }
         }
 
-        return null;
+        // Kalau tidak ketemu (jarang terjadi), destroy session
+        if (!$activeUser) {
+            session()->destroy();
+            return redirect()->to('/login')->with('error', 'Sesi tidak valid');
+        }
+
+        // Simpan user aktif ke session supaya mudah dipakai di controller/view
+        // (opsional, tapi sangat membantu)
+        session()->set('user', (object)$activeUser);
+        session()->set('role', $activeUser['role']);
+
+        // === CEK ROLE (jika filter dipanggil dengan parameter role) ===
+        if (!empty($arguments)) {
+            $requiredRole = $arguments[0]; // contoh: 'owner', 'karyawan'
+
+            if ($activeUser['role'] !== $requiredRole) {
+                return redirect()->to('/login')
+                    ->with('error', 'Anda tidak memiliki akses ke halaman ini');
+            }
+        }
+
+        // Semua lolos
+        return;
     }
 
     /**
