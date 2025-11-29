@@ -56,15 +56,16 @@ class Penjualan extends BaseController
         $id_produk = $this->request->getPost('id_produk');
         $jumlah    = $this->request->getPost('jumlah') ?? 1;
         $id        = $this->request->getGet('id_trx');
-
+        $tanggalPenjualan = $this->request->getPost('tanggal_penjualan');
 
         // --- 1. Jika penjualan dengan ID tsb tidak ada, buat baru ---
         if (!$id) {
             $penjualanData = [
-                'tanggal'     => date('Y-m-d H:i:s'),
+                'tanggal'     => date('Y-m-d H:i:s', strtotime($tanggalPenjualan)),
                 'total'       => 0,
                 'total_diskon' => 0,
                 'grand_total' => 0,
+                'created_at'  => date('Y-m-d H:i:s'),
             ];
             $this->penjualanModel->insert($penjualanData);
             $id = $this->penjualanModel->getInsertID();

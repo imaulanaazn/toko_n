@@ -55,7 +55,7 @@ function countTotal($item)
                     <input type="text" hidden value="<?= $id_penjualan ?>">
                     <div class="mb-4">
                         <label for="" class="mb-2">Tanggal Penjualan</label>
-                        <input type="date" name="tanggal_pengeluaran" value="<?= date('Y-m-d'); ?>" required class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow" placeholder="Nama Bahan">
+                        <input type="date" name="tanggal_penjualan" value="<?= date('Y-m-d'); ?>" required class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow" placeholder="Nama Bahan">
                     </div>
                     <div class="mb-4">
                         <label for="0" class="mb-2">Nama Produk</label>
