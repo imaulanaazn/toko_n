@@ -20,13 +20,10 @@ class PenjualanProdukModel extends Model
         'diskon',
         'subtotal',
         'total',
-        'created_at',
-        'updated_at'
+        'tanggal'
     ];
 
-    protected $useTimestamps = true;
-    protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
+    // protected $useTimestamps = true;
 
     /**
      * Ambil daftar produk per transaksi (dengan detail nama produk dan promo)

@@ -17,7 +17,7 @@ class CreatePenjualanTable extends Migration
             ],
             'tanggal' => [
                 'type' => 'DATETIME',
-                'null' => true, // biarkan null, isi manual dengan date('Y-m-d H:i:s')
+                'null' => true,
             ],
             'total_harga' => [
                 'type'       => 'DECIMAL',

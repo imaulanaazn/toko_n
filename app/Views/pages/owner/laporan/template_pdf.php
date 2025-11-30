@@ -44,8 +44,8 @@
 
     <h2>Laporan Keuangan Warung N</h2>
     <p><strong>Periode:</strong> <?= ucfirst($periode) ?>
-        <br><strong>Dari:</strong> <?= $start ?>
-        <br><strong>Sampai:</strong> <?= $end ?>
+        <br><strong>Dari:</strong> <?= date('d-m-Y | H:i:s', strtotime($start)) ?>
+        <br><strong>Sampai:</strong> <?= date('d-m-Y | H:i:s', strtotime($end)) ?>
     </p>
 
     <!-- ========================== -->
@@ -141,12 +141,12 @@
         <tbody>
             <?php foreach ($dataPenjualan as $row): ?>
                 <tr>
-                    <td><?= $row['tanggal'] ?></td>
+                    <td><?= date('d-m-Y', strtotime($row['tanggal'])) ?></td>
                     <td>
                         <?php
                         $produkList = explode('|', $row['produk_list']);
                         foreach ($produkList as $p) {
-                            echo "- " . $p . "<br>";
+                            echo $p . "<br>";
                         }
                         ?>
                     </td>
@@ -154,7 +154,7 @@
                         <?php
                         $jumlahList = explode('|', $row['jumlah_list']);
                         foreach ($jumlahList as $p) {
-                            echo "- " . $p . "<br>";
+                            echo $p . "<br>";
                         }
                         ?>
                     </td>
@@ -162,7 +162,7 @@
                         <?php
                         $hargaList = explode('|', $row['harga_satuan_list']);
                         foreach ($hargaList as $p) {
-                            echo "- " . format_rupiah($p) . "<br>";
+                            echo format_rupiah($p) . "<br>";
                         }
                         ?>
                     </td>
@@ -170,7 +170,7 @@
                         <?php
                         $produkList = explode('|', $row['subtotal_list']);
                         foreach ($produkList as $p) {
-                            echo "- " . format_rupiah($p) . "<br>";
+                            echo format_rupiah($p) . "<br>";
                         }
                         ?>
                     </td>

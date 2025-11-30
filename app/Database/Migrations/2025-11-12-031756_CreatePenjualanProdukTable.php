@@ -53,11 +53,7 @@ class CreatePenjualanProdukTable extends Migration
                 'default'    => 0,
                 'comment'    => 'harga_satuan * jumlah',
             ],
-            'created_at' => [
-                'type' => 'DATETIME',
-                'null' => true,
-            ],
-            'updated_at' => [
+            'tanggal' => [
                 'type' => 'DATETIME',
                 'null' => true,
             ],

@@ -45,7 +45,7 @@ class Penjualan extends BaseController
             'daftar_produk'   => $daftarProduk,
             'penjualan_items' => $penjualan_items,
             'penjualan'       => $penjualan,
-            'id_penjualan'    => $id_penjualan ?? '',
+            'id_penjualan'    => $id_penjualan,
         ]);
     }
 
@@ -106,6 +106,7 @@ class Penjualan extends BaseController
             'diskon'       => $diskon,
             'subtotal'     => $subtotal,
             'total'        => $total,
+            'tanggal'      => date('Y-m-d H:i:s', strtotime($tanggalPenjualan)),
         ]);
 
         // --- 4. Update total penjualan ---

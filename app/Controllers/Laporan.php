@@ -10,8 +10,11 @@ class Laporan extends BaseController
     public function index()
     {
         $periode = $this->request->getGet('periode') ?? 'harian';
+        $daftarProduk = $this->produkModel->findAll();
+        $produkId = $this->request->getGet('produk_id') ?? '';
 
-        $data = $this->getLaporanData($periode);
+        $data = $this->getLaporanData($periode, $produkId);
+        $data['daftarProduk'] = $daftarProduk;
 
         return view('pages/owner/laporan/index', $data);
     }
@@ -19,13 +22,14 @@ class Laporan extends BaseController
     public function cetak_pdf()
     {
         $periode = $this->request->getGet('periode') ?? 'harian';
+        $produkId = $this->request->getGet('produk_id') ?? '';
 
-        $data = $this->getLaporanData($periode);
+        $data = $this->getLaporanData($periode, $produkId);
 
         return view('pages/owner/laporan/template_pdf', $data);
     }
 
-    private function getLaporanData($periode)
+    private function getLaporanData($periode, $produkId = null)
     {
         // Tentukan rentang tanggal
         $range = $this->getDateRange($periode);
@@ -48,40 +52,42 @@ class Laporan extends BaseController
         // 2. Total Produk Terjual
         // ===========================
         $totalProdukTerjual = $this->penjualanProdukModel
-            ->where("created_at >=", $start)
-            ->where("created_at <=", $end)
+            ->where("tanggal >=", $start)
+            ->where("tanggal <=", $end)
+            ->when(!empty($produkId), fn($q) => $q->where('id_produk', $produkId))
             ->selectSum('jumlah')
             ->first()['jumlah'] ?? 0;
 
-        $totalTransaksi = $this->penjualanModel
-            ->where("created_at >=", $start)
-            ->where("created_at <=", $end)
+        $totalTransaksi = $this->penjualanProdukModel
+            ->where("tanggal >=", $start)
+            ->where("tanggal <=", $end)
+            ->when(!empty($produkId), fn($q) => $q->where('id_produk', $produkId))
+            ->groupBy('id_penjualan')
             ->countAllResults(); // jumlah transaksi penjualan
 
         $rataRataTransaksi = $totalTransaksi;
+        $daysCount = (strtotime($end) - strtotime($start)) / 86400;
 
-        if ($periode == 'mingguan') {
-            $rataRataTransaksi = $totalTransaksi / 7;
-        } else if ($periode == 'bulanan') {
-            $rataRataTransaksi = $totalTransaksi / 30;
-        }
+        $rataRataTransaksi = $totalTransaksi / $daysCount;
 
         // ===========================
         // 3. Total Penjualan (Omset)
         // ===========================
-        $totalPenjualan = $this->penjualanModel
-            ->where("created_at >=", $start)
-            ->where("created_at <=", $end)
-            ->selectSum('grand_total')
-            ->first()['grand_total'] ?? 0;
+        $totalPenjualan = $this->penjualanProdukModel
+            ->where("tanggal >=", $start)
+            ->where("tanggal <=", $end)
+            ->when(!empty($produkId), fn($q) => $q->where('id_produk', $produkId))
+            ->selectSum('total')
+            ->first()['total'] ?? 0;
 
         // ===========================
         // 4. Total HPP
         // ===========================
         // asumsi setiap produk sudah memiliki field 'hpp'
         $penjualanData = $this->penjualanProdukModel
-            ->where("created_at >=", $start)
-            ->where("created_at <=", $end)
+            ->where("tanggal >=", $start)
+            ->where("tanggal <=", $end)
+            ->when(!empty($produkId), fn($q) => $q->where('id_produk', $produkId))
             ->findAll();
 
         $totalHPP = 0;
@@ -104,7 +110,7 @@ class Laporan extends BaseController
         // ===========================
         $labaBersih = $labaKotor - $totalPengeluaran;
 
-        $penjualanPaginated = $this->penjualanModel->getPenjualanPaginated($periode, 10);
+        $penjualanPaginated = $this->penjualanModel->getPenjualanPaginated($periode, 10, $produkId);
         $penjualanPager     = $this->penjualanModel->pager;
 
         $pengeluaranPaginated = $this->trxPengeluaranModel->getPengeluaranPaginated($periode, 10);
@@ -125,8 +131,9 @@ class Laporan extends BaseController
             'totalOperasional'   => $totalOperasional,
             'dataPenjualan'      => $penjualanPaginated,
             'penjualanPager'     => $penjualanPager,
-            'dataPengeluaran' => $pengeluaranPaginated,
-            'pengeluaranPager'     => $pengeluaranPager
+            'dataPengeluaran'    => $pengeluaranPaginated,
+            'pengeluaranPager'   => $pengeluaranPager,
+            'produk_id'          => $produkId
         ];
     }
 
@@ -163,7 +170,6 @@ class Laporan extends BaseController
                     'start' => date('Y-m-01 00:00:00'),
                     'end'   => date('Y-m-t 23:59:59'),
                 ];
-
             case 'harian':
             default:
                 return [

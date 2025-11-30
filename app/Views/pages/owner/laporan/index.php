@@ -12,15 +12,15 @@
                     <a href="/owner/laporan?periode=bulanan" class="flex-1 inline-block px-6 py-2 font-bold text-center uppercase align-middle transition-all rounded-r-lg cursor-pointer text-white <?= $periode == 'bulanan' ? 'bg-slate-700!' : 'bg-white! border border-slate-200! text-slate-600!' ?> leading-pro text-xs ease-soft-in tracking-tight-soft bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs">Bulanan</a>
                 </div>
             </div>
-            <div class="flex-none w-full md:w-auto! max-w-full px-3 my-auto mt-4 md:my-0!">
-                <div class="h-full flex items-center gap-6">
-                    <p class="mb-0 font-semibold leading-normal text-sm text-center">
-                        <?= date('d/m/Y', strtotime($start)) ?>
-                        <?php if (date('d/m/Y', strtotime($start)) != date('d/m/Y', strtotime($end))) : ?>
-                            <span class="mx-1">-</span> <?= date('d/m/Y', strtotime($end)) ?>
-                        <?php endif ?>
-                    </p>
-                    <a href="/owner/laporan/cetak?periode=<?= $periode ?>" class="w-full md:w-max! hidden md:inline-block! px-4 py-2 mr-3 font-bold text-center uppercase align-middle transition-all bg-transparent border rounded-lg cursor-pointer border-slate-300! leading-pro text-xs ease-soft-in tracking-tight-soft bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs text-slate-600">Export PDF</a>
+            <div class="flex-none w-full md:w-auto! max-w-full md:px-3 my-auto mt-4 md:my-0!">
+                <div class="h-full flex items-center gap-3">
+                    <select name="" id="produk_id" class="w-full md:w-max focus:shadow-soft-primary-outline text-sm leading-5.6 ease-soft block rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-fuchsia-300 focus:outline-none">
+                        <option value="">Semua</option>
+                        <?php foreach ($daftarProduk as $p): ?>
+                            <option value="<?= $p['id_produk'] ?>" <?= $p['id_produk'] == $produk_id ? 'selected' : '' ?>><?= $p['nama_produk'] ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <a href="/owner/laporan/cetak?periode=<?= $periode ?>" class="w-full md:w-max! shrink-0 hidden md:inline-block! px-4 py-2.5 mr-3 font-bold text-center uppercase align-middle transition-all bg-transparent border rounded-lg cursor-pointer border-slate-300! leading-pro text-xs ease-soft-in tracking-tight-soft bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs text-slate-600">Export PDF</a>
                 </div>
             </div>
         </div>
@@ -248,7 +248,7 @@
                             <tr>
                                 <td class="p-2 pl-6 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                                     <div class="flex flex-col justify-center">
-                                        <h6 class="mb-0 text-sm leading-normal text-center"><?= $pengeluaran['created_at'] ?></h6>
+                                        <h6 class="mb-0 text-sm leading-normal text-center"><?= date('d-m-Y', strtotime($pengeluaran['created_at'])) ?></h6>
                                     </div>
                                 </td>
                                 <td class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
@@ -307,7 +307,7 @@
                             <tr>
                                 <td class="p-2 pl-6 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                                     <div class="flex flex-col justify-center text-center">
-                                        <h6 class="mb-0 text-sm leading-normal"><?= $penjualan['created_at'] ?></h6>
+                                        <h6 class="mb-0 text-sm leading-normal"><?= date('d-m-Y', strtotime($penjualan['created_at'])) ?></h6>
                                     </div>
                                 </td>
                                 <td class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
@@ -399,5 +399,13 @@
 
 <?= $this->section('script') ?>
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const periode = <?= json_encode($periode) ?>;
+        document.getElementById('produk_id').addEventListener('change', function() {
+            const produkId = this.value;
+            const url = '/owner/laporan?produk_id=' + produkId + '&periode=' + periode;
+            window.location.href = url;
+        });
+    });
 </script>
 <?= $this->endSection(); ?>

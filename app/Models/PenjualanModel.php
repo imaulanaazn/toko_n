@@ -40,7 +40,7 @@ class PenjualanModel extends Model
             ->getResultArray();
     }
 
-    public function getPenjualanPaginated($periode = 'harian', $perPage = 10)
+    public function getPenjualanPaginated($periode = 'harian', $perPage = 10, $produkId = null)
     {
         // Tentukan rentang tanggal
         switch ($periode) {
@@ -70,11 +70,12 @@ class PenjualanModel extends Model
             GROUP_CONCAT(promo.nilai SEPARATOR '|') AS nilai_promo_list,
         ")
             ->join("penjualan_produk", "penjualan_produk.id_penjualan = penjualan.id_penjualan", "left")
-            ->join("produk", "produk.id_produk = penjualan_produk.id_produk", "left")
+            ->join("produk", "produk.id_produk = penjualan_produk.id_produk", "right")
             ->join("promo", "produk.id_promo = promo.id_promo", "left")
             ->where("penjualan.tanggal >=", $start)
             ->where("penjualan.tanggal <=", $end)
-            ->groupBy("penjualan.id_penjualan") // WAJIB supaya pagination tidak rusak
+            ->when(!empty($produkId), fn($q) => $q->where('produk.id_produk', $produkId))
+            ->groupBy("penjualan.id_penjualan")
             ->orderBy("penjualan.tanggal", "DESC")
             ->paginate($perPage, 'penjualan');
     }
