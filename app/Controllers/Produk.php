@@ -113,11 +113,14 @@ class Produk extends BaseController
             ->where('bahan_produk.id_produk', $id)
             ->findAll();
 
+        $hpp = $this->hppService->hitungHPP($id);
+
         return view('pages/owner/produk/form_edit', [
             'daftar_bahan' => $daftarBahan,
             'daftar_promo' => $daftarPromo,
             'produk' => $produk,
-            'bahan_produk' => $bahanProduk
+            'bahan_produk' => $bahanProduk,
+            'hpp_per_unit' => $hpp
         ]);
     }
 
@@ -263,6 +266,10 @@ class Produk extends BaseController
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Produk tidak ditemukan');
         }
 
+        $produk['hpp'] = $this->hppService->hitungHPP($produk['id_produk']);
+
+        $biayaBahanBaku = $this->bahanProdukModel->biayaBahanBaku($produk['id_produk']);
+
         // Pisahkan bahan baku jadi array yang rapi
         $bahanList = [];
         if ($produk['nama_bahan']) {
@@ -285,12 +292,12 @@ class Produk extends BaseController
         }
 
         $data = [
-            'title'      => 'Detail Produk - ' . $produk['nama_produk'],
             'produk'     => $produk,
             'bahan'      => $bahanList,
             'promo_aktif' => $produk['status_promo'] === 'aktif'
                 && $produk['tanggal_mulai'] <= date('Y-m-d')
                 && $produk['tanggal_selesai'] >= date('Y-m-d'),
+            'biaya_bahan_baku' => $biayaBahanBaku,
         ];
 
         return view('pages/owner/produk/detail', $data);

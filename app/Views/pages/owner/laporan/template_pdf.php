@@ -139,12 +139,12 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($dataPenjualan as $row): ?>
+            <?php foreach ($dataPenjualan as $penjualan): ?>
                 <tr>
-                    <td><?= date('d-m-Y', strtotime($row['tanggal'])) ?></td>
+                    <td><?= date('d-m-Y', strtotime($penjualan['tanggal'])) ?></td>
                     <td>
                         <?php
-                        $produkList = explode('|', $row['produk_list']);
+                        $produkList = explode('|', $penjualan['produk_list']);
                         foreach ($produkList as $p) {
                             echo $p . "<br>";
                         }
@@ -152,7 +152,7 @@
                     </td>
                     <td>
                         <?php
-                        $jumlahList = explode('|', $row['jumlah_list']);
+                        $jumlahList = explode('|', $penjualan['jumlah_list']);
                         foreach ($jumlahList as $p) {
                             echo $p . "<br>";
                         }
@@ -160,7 +160,7 @@
                     </td>
                     <td>
                         <?php
-                        $hargaList = explode('|', $row['harga_satuan_list']);
+                        $hargaList = explode('|', $penjualan['harga_satuan_list']);
                         foreach ($hargaList as $p) {
                             echo format_rupiah($p) . "<br>";
                         }
@@ -168,7 +168,7 @@
                     </td>
                     <td>
                         <?php
-                        $produkList = explode('|', $row['subtotal_list']);
+                        $produkList = explode('|', $penjualan['subtotal_list']);
                         foreach ($produkList as $p) {
                             echo format_rupiah($p) . "<br>";
                         }
@@ -176,28 +176,20 @@
                     </td>
                     <td class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                         <?php
-                        $produkList = explode('|', $row['produk_list']);
-                        $tipePromoList = explode('|', $row['tipe_promo_list']);
-                        $nilaiPromoList = explode('|', $row['nilai_promo_list']);
+                        $produkList = explode('|', $penjualan['produk_list']);
+                        $diskonList = explode('|', $penjualan['diskon_list']);
                         ?>
                         <ul>
                             <?php foreach ($produkList as $index => $produk): ?>
-                                <li class="py-1">
+                                <li class="py-1" style="list-style: none;">
                                     <?php
-                                    $tipePromo = $tipePromoList[$index] ?? null;
-                                    $nilaiPromo = $nilaiPromoList[$index] ?? null;
+                                    $diskon = $diskonList[$index] ?? null;
                                     ?>
 
-                                    <?php if ($tipePromo == 'persen'): ?>
+                                    <?php if ($diskon > 0): ?>
                                         <span class="text-xs font-semibold leading-tight text-slate-400">
-                                            <?= $nilaiPromo . '%' ?>
+                                            <?= format_rupiah($diskon) ?>
                                         </span>
-
-                                    <?php elseif ($tipePromo == 'nominal'): ?>
-                                        <span class="text-xs font-semibold leading-tight text-slate-400">
-                                            <?= format_rupiah($nilaiPromo) ?>
-                                        </span>
-
                                     <?php else: ?>
                                         <span class="text-xs font-semibold leading-tight text-slate-400">-</span>
                                     <?php endif ?>
@@ -205,7 +197,15 @@
                             <?php endforeach ?>
                         </ul>
                     </td>
-                    <td><?= format_rupiah($row['grand_total']) ?></td>
+                    <td>
+                        <?php if ($produk_id): ?>
+                            <?php foreach (explode('|', $penjualan['total_list']) as $total): ?>
+                                <span class="text-xs font-semibold leading-tight text-slate-400"><?= format_rupiah($total) ?></span>
+                            <?php endforeach ?>
+                        <?php else: ?>
+                            <span class="text-xs font-semibold leading-tight text-slate-400"><?= format_rupiah($penjualan['grand_total']) ?></span>
+                        <?php endif ?>
+                    </td>
                 </tr>
             <?php endforeach ?>
         </tbody>

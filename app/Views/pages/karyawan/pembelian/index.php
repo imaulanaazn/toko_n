@@ -25,11 +25,11 @@
                     </div>
                     <div class="mb-4">
                         <label for="" class="mb-2">Jumlah</label>
-                        <input type="number" name="jumlah" id="jumlah" min="1" class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow" placeholder="Jumlah" aria-label="Email">
+                        <input type="number" name="jumlah" id="jumlah" class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow" placeholder="Jumlah" aria-label="Email">
                     </div>
                     <div class="mb-4">
-                        <label for="" class="mb-2">Harga Satuan</label>
-                        <input type="number" name="harga_satuan" id="harga_satuan" required class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow" placeholder="Harga Satuan">
+                        <label for="" class="mb-2" id="harga_label">Harga Satuan</label>
+                        <input type="number" name="harga_satuan" id="harga_satuan" min="1" required class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow" placeholder="Harga Satuan">
                     </div>
                     <div class="mb-4">
                         <label for="" class="mb-2">Total Harga</label>
@@ -52,6 +52,10 @@
     const jumlahInput = document.getElementById('jumlah');
     const hargaSatuanInput = document.getElementById('harga_satuan');
     const totalhargaInput = document.getElementById('total_harga');
+    const hargaLabel = document.getElementById('harga_label');
+    const daftarBahan = <?= json_encode($pengeluaran) ?>;
+
+
     new TomSelect("#select-bahan", {
         create: true,
         sortField: {
@@ -61,7 +65,7 @@
     });
 
     jumlahInput.addEventListener('keyup', () => {
-        const total = jumlahInput.value * hargaSatuanInput.value;
+        const total = jumlahInput.value * (hargaSatuanInput.value || 1);
         totalhargaInput.value = new Intl.NumberFormat('id-ID', {
             style: 'currency',
             currency: 'IDR',
@@ -77,5 +81,13 @@
             minimumFractionDigits: 0
         }).format(total);
     });
+
+    selectBahan.addEventListener('change', (e) => {
+        const selectedBahan = daftarBahan.find((bahan) => (bahan.id_pengeluaran == e.target.value));
+        hargaLabel.innerText = "Harga  " + (selectedBahan.satuan ? ` / ${selectedBahan.satuan}` : '(Rp...)');
+    })
+
+    const selectedBahan = daftarBahan.find((bahan) => (bahan.id_pengeluaran == selectBahan.value));
+    hargaLabel.innerText = "Harga  " + (selectedBahan.satuan ? ` / ${selectedBahan.satuan}` : '(Rp...)');
 </script>
 <?= $this->endSection() ?>

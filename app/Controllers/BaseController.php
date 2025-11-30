@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Libraries\HPPService;
 use App\Models\BahanProdukModel;
 use App\Models\PengeluaranModel;
 use App\Models\PenjualanModel;
@@ -56,6 +57,7 @@ abstract class BaseController extends Controller
     protected $penjualanProdukModel;
     protected $validation;
     protected $role;
+    protected $hppService;
 
 
 
@@ -86,6 +88,7 @@ abstract class BaseController extends Controller
         $this->penjualanProdukModel = new PenjualanProdukModel();
         $this->validation = \Config\Services::validation();
         $this->role = session()->get('role');
+        $this->hppService = new HPPService();
 
         // E.g.: $this->session = service('session');
     }

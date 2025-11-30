@@ -47,7 +47,7 @@
                             <thead class="align-bottom">
                                 <tr>
                                     <th class="px-2 pr-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Nama Bahan</th>
-                                    <th class="px-2 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Jml</th>
+                                    <th class="px-2 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Jumlah</th>
                                     <th class="px-2 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Harga Satuan</th>
                                     <th class="px-2 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Output Produksi</th>
                                 </tr>
@@ -72,8 +72,8 @@
                             </tbody>
                         </table>
                         <div class="flex gap-3 mt-4 justify-end">
-                            <p class="font-semibold text-slate-700! mb-0!">Total HPP :</p>
-                            <p class="text-slate-600 mb-0!">Rp <?= number_format($produk['hpp']) ?></p>
+                            <p class="font-semibold text-slate-700! mb-0!">Bahan Baku :</p>
+                            <p class="text-slate-600 mb-0!">Rp <?= number_format($biaya_bahan_baku) ?> / <?= $produk['satuan'] ?></p>
                         </div>
                     </div>
                 <?php else: ?>

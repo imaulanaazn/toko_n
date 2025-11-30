@@ -22,9 +22,11 @@ class Laporan extends BaseController
     public function cetak_pdf()
     {
         $periode = $this->request->getGet('periode') ?? 'harian';
+        $daftarProduk = $this->produkModel->findAll();
         $produkId = $this->request->getGet('produk_id') ?? '';
 
         $data = $this->getLaporanData($periode, $produkId);
+        $data['daftarProduk'] = $daftarProduk;
 
         return view('pages/owner/laporan/template_pdf', $data);
     }
@@ -93,11 +95,7 @@ class Laporan extends BaseController
         $totalHPP = 0;
 
         foreach ($penjualanData as $trx) {
-            $produk = $this->produkModel->find($trx['id_produk']);
-
-            if ($produk) {
-                $totalHPP += ($produk['hpp'] * $trx['jumlah']);
-            }
+            $totalHPP += $this->hppService->hitungHPP($trx['id_produk']) * $trx['jumlah'];
         }
 
         // ===========================

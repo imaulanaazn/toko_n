@@ -40,7 +40,7 @@
                             <tr>
                                 <td class="p-2 pl-6 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                                     <div class="flex flex-col justify-center">
-                                        <h6 class="mb-0 text-sm leading-normal text-center"><?= date('d/m/Y', strtotime($pengeluaran['created_at']))  ?></h6>
+                                        <h6 class="mb-0 text-sm leading-normal text-center"><?= date('d/m/Y', strtotime($pengeluaran['tanggal_pengeluaran']))  ?></h6>
                                     </div>
                                 </td>
                                 <td class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
@@ -99,7 +99,7 @@
                             <tr>
                                 <td class="p-2 pl-6 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                                     <div class="flex flex-col justify-center text-center">
-                                        <h6 class="mb-0 text-sm leading-normal"><?= date('d/m/Y', strtotime($penjualan['created_at']))  ?></h6>
+                                        <h6 class="mb-0 text-sm leading-normal"><?= date('d/m/Y', strtotime($penjualan['tanggal']))  ?></h6>
                                     </div>
                                 </td>
                                 <td class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
@@ -141,27 +141,19 @@
                                 <td class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                                     <?php
                                     $produkList = explode('|', $penjualan['produk_list']);
-                                    $tipePromoList = explode('|', $penjualan['tipe_promo_list']);
-                                    $nilaiPromoList = explode('|', $penjualan['nilai_promo_list']);
+                                    $diskonList = explode('|', $penjualan['diskon_list']);
                                     ?>
                                     <ul>
                                         <?php foreach ($produkList as $index => $produk): ?>
                                             <li class="py-1">
                                                 <?php
-                                                $tipePromo = $tipePromoList[$index] ?? null;
-                                                $nilaiPromo = $nilaiPromoList[$index] ?? null;
+                                                $diskon = $diskonList[$index] ?? null;
                                                 ?>
 
-                                                <?php if ($tipePromo == 'persen'): ?>
+                                                <?php if ($diskon > 0): ?>
                                                     <span class="text-xs font-semibold leading-tight text-slate-400">
-                                                        <?= $nilaiPromo . '%' ?>
+                                                        <?= format_rupiah($diskon) ?>
                                                     </span>
-
-                                                <?php elseif ($tipePromo == 'nominal'): ?>
-                                                    <span class="text-xs font-semibold leading-tight text-slate-400">
-                                                        <?= format_rupiah($nilaiPromo) ?>
-                                                    </span>
-
                                                 <?php else: ?>
                                                     <span class="text-xs font-semibold leading-tight text-slate-400">-</span>
                                                 <?php endif ?>

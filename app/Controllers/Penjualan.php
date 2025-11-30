@@ -49,7 +49,6 @@ class Penjualan extends BaseController
         ]);
     }
 
-
     public function tambah_produk()
     {
         // Ambil data dari request (misalnya lewat AJAX atau form)

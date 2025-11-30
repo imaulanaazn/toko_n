@@ -20,11 +20,10 @@
                             <option value="<?= $p['id_produk'] ?>" <?= $p['id_produk'] == $produk_id ? 'selected' : '' ?>><?= $p['nama_produk'] ?></option>
                         <?php endforeach; ?>
                     </select>
-                    <a href="/owner/laporan/cetak?periode=<?= $periode ?>" class="w-full md:w-max! shrink-0 hidden md:inline-block! px-4 py-2.5 mr-3 font-bold text-center uppercase align-middle transition-all bg-transparent border rounded-lg cursor-pointer border-slate-300! leading-pro text-xs ease-soft-in tracking-tight-soft bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs text-slate-600">Export PDF</a>
+                    <a href="/owner/laporan/cetak?periode=<?= $periode ?>&produk_id=<?= $produk_id ?>" class="w-full md:w-max! shrink-0 hidden md:inline-block! px-4 py-2.5 mr-3 font-bold text-center uppercase align-middle transition-all bg-transparent border rounded-lg cursor-pointer border-slate-300! leading-pro text-xs ease-soft-in tracking-tight-soft bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs text-slate-600">Export PDF</a>
                 </div>
             </div>
         </div>
-        <a href="/owner/laporan/cetak?periode=<?= $periode ?>" class="w-full mt-4 inline-block md:hidden! px-4 py-2 mr-3 font-bold text-center uppercase align-middle transition-all bg-transparent border rounded-lg cursor-pointer border-slate-300! leading-pro text-xs ease-soft-in tracking-tight-soft bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs text-slate-600">Export PDF</a>
     </div>
 </div>
 
@@ -248,7 +247,7 @@
                             <tr>
                                 <td class="p-2 pl-6 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                                     <div class="flex flex-col justify-center">
-                                        <h6 class="mb-0 text-sm leading-normal text-center"><?= date('d-m-Y', strtotime($pengeluaran['created_at'])) ?></h6>
+                                        <h6 class="mb-0 text-sm leading-normal text-center"><?= date('d-m-Y', strtotime($pengeluaran['tanggal_pengeluaran'])) ?></h6>
                                     </div>
                                 </td>
                                 <td class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
@@ -307,7 +306,7 @@
                             <tr>
                                 <td class="p-2 pl-6 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                                     <div class="flex flex-col justify-center text-center">
-                                        <h6 class="mb-0 text-sm leading-normal"><?= date('d-m-Y', strtotime($penjualan['created_at'])) ?></h6>
+                                        <h6 class="mb-0 text-sm leading-normal"><?= date('d-m-Y', strtotime($penjualan['tanggal'])) ?></h6>
                                     </div>
                                 </td>
                                 <td class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
@@ -349,27 +348,19 @@
                                 <td class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                                     <?php
                                     $produkList = explode('|', $penjualan['produk_list']);
-                                    $tipePromoList = explode('|', $penjualan['tipe_promo_list']);
-                                    $nilaiPromoList = explode('|', $penjualan['nilai_promo_list']);
+                                    $diskonList = explode('|', $penjualan['diskon_list']);
                                     ?>
                                     <ul>
                                         <?php foreach ($produkList as $index => $produk): ?>
                                             <li class="py-1">
                                                 <?php
-                                                $tipePromo = $tipePromoList[$index] ?? null;
-                                                $nilaiPromo = $nilaiPromoList[$index] ?? null;
+                                                $diskon = $diskonList[$index] ?? null;
                                                 ?>
 
-                                                <?php if ($tipePromo == 'persen'): ?>
+                                                <?php if ($diskon > 0): ?>
                                                     <span class="text-xs font-semibold leading-tight text-slate-400">
-                                                        <?= $nilaiPromo . '%' ?>
+                                                        <?= format_rupiah($diskon) ?>
                                                     </span>
-
-                                                <?php elseif ($tipePromo == 'nominal'): ?>
-                                                    <span class="text-xs font-semibold leading-tight text-slate-400">
-                                                        <?= format_rupiah($nilaiPromo) ?>
-                                                    </span>
-
                                                 <?php else: ?>
                                                     <span class="text-xs font-semibold leading-tight text-slate-400">-</span>
                                                 <?php endif ?>
@@ -379,9 +370,14 @@
                                 </td>
 
                                 <td class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                                    <span class="text-xs font-semibold leading-tight text-slate-400"><?= format_rupiah($penjualan['grand_total']) ?></span>
+                                    <?php if ($produk_id): ?>
+                                        <?php foreach (explode('|', $penjualan['total_list']) as $total): ?>
+                                            <span class="text-xs font-semibold leading-tight text-slate-400"><?= format_rupiah($total) ?></span>
+                                        <?php endforeach ?>
+                                    <?php else: ?>
+                                        <span class="text-xs font-semibold leading-tight text-slate-400"><?= format_rupiah($penjualan['grand_total']) ?></span>
+                                    <?php endif ?>
                                 </td>
-
 
                                 <td class="p-2 pr-6 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                                     <a href="/owner/penjualan/hapus/<?= $penjualan['id_penjualan'] ?>" class="text-xs font-bold uppercase! underline leading-tight text-slate-600"> Hapus </a>

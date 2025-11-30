@@ -14,7 +14,6 @@ class ProdukModel extends Model
         'nama_produk',
         'satuan',
         'harga',
-        'hpp',
         'margin',
         'deskripsi',
         'produksi_harian',

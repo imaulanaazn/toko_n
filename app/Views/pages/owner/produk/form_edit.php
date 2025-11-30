@@ -44,7 +44,7 @@
                         <div class="mb-4 flex items-center gap-3">
                             <div class="w-full">
                                 <label for="hpp" class="mb-2">HPP</label>
-                                <input type="number" name="hpp" id="hpp" value="<?= esc($produk['hpp']) ?>" disabled
+                                <input type="number" name="hpp" id="hpp" value="<?= esc($hpp_per_unit) ?>" disabled
                                     class="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full rounded-lg border border-gray-300 bg-white py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none"
                                     placeholder="12000">
                             </div>
@@ -262,11 +262,11 @@
 
         selectBahan.addEventListener('change', (e) => {
             const selectedBahan = daftarBahan.find((bahan) => (bahan.id_pengeluaran == e.target.value));
-            jumlahLabel.innerText = "Jumlah " + (selectedBahan.satuan ? `(${selectedBahan.satuan})` : '(Rp...)');
+            jumlahLabel.innerText = "Jumlah " + (selectedBahan.satuan ? `(${selectedBahan.satuan})` : '');
         })
 
         const selectedBahan = daftarBahan.find((bahan) => (bahan.id_pengeluaran == selectBahan.value));
-        jumlahLabel.innerText = "Jumlah " + (selectedBahan.satuan ? `(${selectedBahan.satuan})` : '(Rp...)');
+        jumlahLabel.innerText = "Jumlah " + (selectedBahan.satuan ? `(${selectedBahan.satuan})` : '');
     });
 </script>
 <?= $this->endSection() ?>

@@ -21,76 +21,40 @@ class HPPService
 
     public function hitungHPP($id_produk)
     {
-        // Ambil bahan produk (jumlah & output)
-        $bahanProdukList = $this->bahanProdukModel
-            ->where('id_produk', $id_produk)
-            ->findAll();
-
-        if (empty($bahanProdukList)) {
-            return 0;
-        }
-
-        $totalHpp = 0;
-
-        foreach ($bahanProdukList as $bahan) {
-
-            // Ambil transaksi bahan terbaru berdasarkan id_bahan
-            $hargaBahan = $this->trxPengeluaranModel
-                ->where('id_pengeluaran', $bahan['id_bahan'])
-                ->orderBy('tanggal_pengeluaran', 'DESC')
-                ->first();
-
-            if (!$hargaBahan) {
-                continue;
-            }
-
-            // Hitung biaya bahan per satu produk
-            $biayaPerProduk = ($bahan['jumlah'] / $bahan['output'])
-                * $hargaBahan['harga_satuan'];
-
-            $totalHpp += $biayaPerProduk;
-        }
-
-        // -----------------------------
-        //  HITUNG OVERHEAD (Operasional & Gaji)
-        // -----------------------------
-
-        // Total operasional bulan berjalan
-        $operasional = $this->trxPengeluaranModel
-            ->selectSum('trx_pengeluaran.total_harga', 'total_operasional')
-            ->join('pengeluaran', 'pengeluaran.id_pengeluaran = trx_pengeluaran.id_pengeluaran')
-            ->where('pengeluaran.kategori', 'operasional')
-            ->where('tanggal_pengeluaran >=', date('Y-m-01'))
-            ->first()['total_operasional'] ?? 0;
-
-        // Total gaji bulan berjalan
-        $gaji = $this->trxPengeluaranModel
-            ->selectSum('trx_pengeluaran.total_harga', 'total_gaji')
-            ->join('pengeluaran', 'pengeluaran.id_pengeluaran = trx_pengeluaran.id_pengeluaran')
-            ->where('pengeluaran.kategori', 'gaji')
-            ->where('tanggal_pengeluaran >=', date('Y-m-01'))
-            ->first()['total_gaji'] ?? 0;
-
-        // Ambil data produk (untuk produksi_harian)
+        // 1. Ambil data produk
         $produk = $this->produkModel->find($id_produk);
+        if (!$produk) return 0;
+
         $produksiHarian = $produk['produksi_harian'] ?? 1;
 
-        // Asumsi 30 hari produksi
-        $totalProduksiBulan = $produksiHarian * 30;
+        // Gunakan 30 hari tetap sebagai standar bulan (atau ambil dari setting)
+        $hariDalamBulan = 26;
 
-        $biayaOverhead = 0;
+        // Total produksi dalam 1 bulan penuh
+        $totalProduksiBulan = $produksiHarian * $hariDalamBulan;
 
-        if ($totalProduksiBulan > 0) {
-            $biayaOverhead = ($operasional + $gaji) / $totalProduksiBulan;
-        }
+        // 2. Biaya Bahan Baku untuk 1 bulan penuh
+        $biayaBahanBakuBulanan = $this->bahanProdukModel->biayaBahanBaku($id_produk) * $totalProduksiBulan;
 
-        $totalHpp += $biayaOverhead;
+        // 3. Biaya Overhead Bulanan (Operasional + Gaji) → bulan berjalan
+        $overheadBulanan = $this->trxPengeluaranModel
+            ->selectSum('total_harga', 'total')
+            ->join('pengeluaran', 'pengeluaran.id_pengeluaran = trx_pengeluaran.id_pengeluaran')
+            ->whereIn('pengeluaran.kategori', ['operasional', 'gaji'])
+            ->where('MONTH(tanggal_pengeluaran)', date('m'))
+            ->where('YEAR(tanggal_pengeluaran)', date('Y'))
+            ->get()
+            ->getRow()
+            ->total ?? 0;
 
-        // Update nilai HPP produk
-        $this->produkModel->update($id_produk, [
-            'hpp' => $totalHpp
-        ]);
+        // 4. Total Biaya Produksi Bulanan
+        $totalBiayaProduksiBulanan = $biayaBahanBakuBulanan + $overheadBulanan;
 
-        return round($totalHpp, 2);
+        // 5. HPP per unit = Total Biaya Bulanan ÷ Total Produksi Bulanan
+        $hppPerUnit = $totalProduksiBulan > 0
+            ? $totalBiayaProduksiBulanan / $totalProduksiBulan
+            : 0;
+
+        return round($hppPerUnit, 2);
     }
 }

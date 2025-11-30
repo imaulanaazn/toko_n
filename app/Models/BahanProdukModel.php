@@ -19,4 +19,14 @@ class BahanProdukModel extends Model
             ->where('bahan_produk.id_produk', $id_produk)
             ->findAll();
     }
+
+    public function biayaBahanBaku($id_produk)
+    {
+        $builder = $this->select("SUM(bahan_produk.jumlah * pengeluaran.harga_satuan / bahan_produk.output) AS total_bahan_baku")
+            ->join('pengeluaran', 'pengeluaran.id_pengeluaran = bahan_produk.id_bahan', 'left')
+            ->where('bahan_produk.id_produk', $id_produk)
+            ->get();
+
+        return $builder->getRowArray()['total_bahan_baku'];
+    }
 }

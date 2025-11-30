@@ -9,8 +9,12 @@ class Pembelian extends BaseController
 {
     public function index()
     {
-        $pengeluaran = $this->pengeluaranModel->findAll();
-        $role = session()->get('role');
+        $pengeluaran = [];
+        if ($this->role == 'owner') {
+            $pengeluaran = $this->pengeluaranModel->findAll();
+        } else {
+            $pengeluaran = $this->pengeluaranModel->where('kategori !=', 'gaji')->findAll();
+        }
         return view($this->role == 'owner' ? 'pages/owner/pembelian/index' : 'pages/karyawan/pembelian/index', [
             'pengeluaran' => $pengeluaran
         ]);
@@ -21,7 +25,7 @@ class Pembelian extends BaseController
         // Validasi input
         $this->validation->setRules([
             'tanggal_pengeluaran' => 'required|valid_date',
-            'jumlah'      => 'required|decimal',
+            'harga_satuan'      => 'required|decimal',
             'id_pengeluaran'    => 'required|decimal',
         ]);
 
@@ -29,17 +33,17 @@ class Pembelian extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validation->getErrors());
         }
 
-        $harga_satuan = 1;
+        $jumlah = 1;
 
-        if ($this->request->getPost('harga_satuan')) {
-            $harga_satuan = $this->request->getPost('harga_satuan');
+        if ($this->request->getPost('jumlah')) {
+            $jumlah = $this->request->getPost('jumlah');
         }
 
         // Ambil input
         $id_pengeluaran  = $this->request->getPost('id_pengeluaran');
         $tanggal_pengeluaran = $this->request->getPost('tanggal_pengeluaran');
-        $jumlah    = $this->request->getPost('jumlah');
-        $harga     = $harga_satuan;
+        $jumlah    = $jumlah;
+        $harga     = (int) $this->request->getPost('harga_satuan');
         $total     = $jumlah * $harga;
         $nama_pengeluaran = $id_pengeluaran;
 

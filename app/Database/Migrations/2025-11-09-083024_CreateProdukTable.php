@@ -28,11 +28,6 @@ class CreateProdukTable extends Migration
                 'constraint' => '10,2',
                 'default'    => 0,
             ],
-            'hpp' => [
-                'type'       => 'DECIMAL',
-                'constraint' => '10,2',
-                'default'    => 0,
-            ],
             'margin' => [
                 'type'       => 'DECIMAL',
                 'constraint' => '10,2',
