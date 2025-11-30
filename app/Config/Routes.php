@@ -42,6 +42,8 @@ $routes->group('owner', ['filter' => 'auth:owner'], function ($routes) {
     //Laba
     $routes->get('laporan', 'Laporan::index');
     $routes->get('laporan/cetak', 'Laporan::cetak_pdf');
+
+    $routes->get('labarugi', 'LabaRugi::index');
 });
 
 $routes->group('karyawan', ['filter' => 'auth:karyawan'], function ($routes) {

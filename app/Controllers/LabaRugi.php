@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 
-class Laporan extends BaseController
+class LabaRugi extends BaseController
 {
     public function index()
     {
@@ -16,19 +16,7 @@ class Laporan extends BaseController
         $data = $this->getLaporanData($periode, $produkId);
         $data['daftarProduk'] = $daftarProduk;
 
-        return view('pages/owner/laporan/index', $data);
-    }
-
-    public function cetak_pdf()
-    {
-        $periode = $this->request->getGet('periode') ?? 'harian';
-        $daftarProduk = $this->produkModel->findAll();
-        $produkId = $this->request->getGet('produk_id') ?? '';
-
-        $data = $this->getLaporanData($periode, $produkId);
-        $data['daftarProduk'] = $daftarProduk;
-
-        return view('pages/owner/laporan/template_pdf', $data);
+        return view('pages/owner/labarugi/index', $data);
     }
 
     private function getLaporanData($periode, $produkId = null)
@@ -51,29 +39,7 @@ class Laporan extends BaseController
         $totalOperasional = $this->getTotalOperasional($start, $end);
 
         // ===========================
-        // 2. Total Produk Terjual
-        // ===========================
-        $totalProdukTerjual = $this->penjualanProdukModel
-            ->where("tanggal >=", $start)
-            ->where("tanggal <=", $end)
-            ->when(!empty($produkId), fn($q) => $q->where('id_produk', $produkId))
-            ->selectSum('jumlah')
-            ->first()['jumlah'] ?? 0;
-
-        $totalTransaksi = $this->penjualanProdukModel
-            ->where("tanggal >=", $start)
-            ->where("tanggal <=", $end)
-            ->when(!empty($produkId), fn($q) => $q->where('id_produk', $produkId))
-            ->groupBy('id_penjualan')
-            ->countAllResults(); // jumlah transaksi penjualan
-
-        $rataRataTransaksi = $totalTransaksi;
-        $daysCount = (strtotime($end) - strtotime($start)) / 86400;
-
-        $rataRataTransaksi = $totalTransaksi / $daysCount;
-
-        // ===========================
-        // 3. Total Penjualan (Omset)
+        // 2. Total Penjualan (Omset)
         // ===========================
         $totalPenjualan = $this->penjualanProdukModel
             ->where("tanggal >=", $start)
@@ -83,7 +49,7 @@ class Laporan extends BaseController
             ->first()['total'] ?? 0;
 
         // ===========================
-        // 4. Total HPP
+        // 3. Total HPP
         // ===========================
         // asumsi setiap produk sudah memiliki field 'hpp'
         $penjualanData = $this->penjualanProdukModel
@@ -99,39 +65,24 @@ class Laporan extends BaseController
         }
 
         // ===========================
-        // 5. Laba Kotor
+        // 4. Laba Kotor
         // ===========================
         $labaKotor = $totalPenjualan - $totalHPP;
 
         // ===========================
-        // 6. Laba Bersih
+        // 5. Laba Bersih
         // ===========================
         $labaBersih = $labaKotor - $totalPengeluaran;
-
-        $penjualanPaginated = $this->penjualanModel->getPenjualanPaginated($periode, 10, $produkId);
-        $penjualanPager     = $this->penjualanModel->pager;
-
-        $pengeluaranPaginated = $this->trxPengeluaranModel->getPengeluaranPaginated($periode, 10);
-        $pengeluaranPager     = $this->trxPengeluaranModel->pager;
 
         return [
             'periode'            => $periode,
             'start'              => $start,
             'end'                => $end,
-            'totalPengeluaran'   => $totalPengeluaran,
-            'totalProdukTerjual' => $totalProdukTerjual,
             'totalPenjualan'     => $totalPenjualan,
             'totalHPP'           => $totalHPP,
             'labaKotor'          => $labaKotor,
             'labaBersih'         => $labaBersih,
-            'totalTransaksi'     => $totalTransaksi,
-            'rataRataTransaksi'  => $rataRataTransaksi,
             'totalOperasional'   => $totalOperasional,
-            'dataPenjualan'      => $penjualanPaginated,
-            'penjualanPager'     => $penjualanPager,
-            'dataPengeluaran'    => $pengeluaranPaginated,
-            'pengeluaranPager'   => $pengeluaranPager,
-            'produk_id'          => $produkId
         ];
     }
 

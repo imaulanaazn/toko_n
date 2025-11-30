@@ -109,6 +109,13 @@ define('OWNER_MENU_ITEMS', [
         'sub_menu' => []
     ],
     [
+        'name' => 'Laba Rugi',
+        'icon' => '',
+        'url' =>  '/owner/labarugi',
+        'has_submenu' => false,
+        'sub_menu' => []
+    ],
+    [
         'name' => 'Laporan',
         'icon' => '',
         'url' =>  '/owner/laporan',
