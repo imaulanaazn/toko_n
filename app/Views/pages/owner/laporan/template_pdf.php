@@ -199,9 +199,13 @@
                     </td>
                     <td>
                         <?php if ($produk_id): ?>
-                            <?php foreach (explode('|', $penjualan['total_list']) as $total): ?>
-                                <span class="text-xs font-semibold leading-tight text-slate-400"><?= format_rupiah($total) ?></span>
-                            <?php endforeach ?>
+                            <ul>
+                                <?php foreach (explode('|', $penjualan['total_list']) as $total): ?>
+                                    <li class="py-1" style="list-style: none;">
+                                        <span class="text-xs font-semibold leading-tight text-slate-400"><?= format_rupiah($total) ?></span>
+                                    </li>
+                                <?php endforeach ?>
+                            </ul>
                         <?php else: ?>
                             <span class="text-xs font-semibold leading-tight text-slate-400"><?= format_rupiah($penjualan['grand_total']) ?></span>
                         <?php endif ?>
