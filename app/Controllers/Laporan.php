@@ -61,11 +61,12 @@ class Laporan extends BaseController
             ->first()['jumlah'] ?? 0;
 
         $totalTransaksi = $this->penjualanProdukModel
-            ->where("tanggal >=", $start)
-            ->where("tanggal <=", $end)
+            ->select('id_penjualan')
+            ->where('tanggal >=', $start)
+            ->where('tanggal <=', $end)
             ->when(!empty($produkId), fn($q) => $q->where('id_produk', $produkId))
-            ->groupBy('id_penjualan')
-            ->countAllResults(); // jumlah transaksi penjualan
+            ->distinct()
+            ->countAllResults();
 
         $rataRataTransaksi = $totalTransaksi;
         $daysCount = (strtotime($end) - strtotime($start)) / 86400;
