@@ -85,9 +85,11 @@
     selectBahan.addEventListener('change', (e) => {
         const selectedBahan = daftarBahan.find((bahan) => (bahan.id_pengeluaran == e.target.value));
         hargaLabel.innerText = "Harga  " + (selectedBahan.satuan ? ` / ${selectedBahan.satuan}` : '(Rp...)');
+        hargaSatuanInput.value = selectedBahan.harga_satuan;
     })
 
     const selectedBahan = daftarBahan.find((bahan) => (bahan.id_pengeluaran == selectBahan.value));
     hargaLabel.innerText = "Harga  " + (selectedBahan.satuan ? ` / ${selectedBahan.satuan}` : '(Rp...)');
+    hargaSatuanInput.value = selectedBahan.harga_satuan;
 </script>
 <?= $this->endSection() ?>
