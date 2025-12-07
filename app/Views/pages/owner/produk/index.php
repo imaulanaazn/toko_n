@@ -46,19 +46,19 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="p-2 text-left align-middle bg-transparent border-b whitespace-nowrap shadow-transparent flex">
+                                    <td class="min-w-64! p-2 text-left align-middle bg-transparent border-b whitespace-nowrap shadow-transparent flex">
                                         <table class="items-center w-full mb-0 align-top border-gray-200 text-slate-500">
                                             <tbody>
                                                 <?php foreach (explode('|', $produk['daftar_bahan']) as $index => $bahan): ?>
                                                     <tr class="flex">
-                                                        <td class="py-1! flex-1 text-left align-middle bg-transparent border-b shadow-transparent">
-                                                            <span class=" text-xs font-semibold leading-tight text-slate-400"><?= $bahan ?></span>
+                                                        <td class="py-1! w-1/3 text-left align-middle bg-transparent border-b shadow-transparent">
+                                                            <span class="text-wrap text-xs font-semibold leading-tight text-slate-400"><?= $bahan ?></span>
                                                         </td>
-                                                        <td class="py-1! px-2 flex-1 text-left align-middle bg-transparent border-b shadow-transparent">
-                                                            <span class=" text-xs font-semibold leading-tight text-slate-400"><?= format_rupiah(explode('|', $produk['harga_bahan'])[$index]) ?></span>
+                                                        <td class="py-1! pl-2 w-1/3 text-left align-middle bg-transparent border-b shadow-transparent">
+                                                            <span class="text-xs font-semibold leading-tight text-slate-400"><?= format_rupiah(explode('|', $produk['harga_bahan'])[$index]) ?></span>
                                                         </td>
-                                                        <td class="py-1! flex-1 text-left align-middle bg-transparent border-b shadow-transparent">
-                                                            <span class=" text-xs font-semibold leading-tight text-slate-400">x<?= (int) explode('|', $produk['jumlah_bahan'])[$index] ?> <?= explode('|', $produk['satuan_bahan'])[$index] ?></span>
+                                                        <td class="py-1! w-1/3 text-left align-middle bg-transparent border-b shadow-transparent">
+                                                            <span class="text-xs font-semibold leading-tight text-slate-400">x<?= (int) explode('|', $produk['jumlah_bahan'])[$index] ?> <?= explode('|', $produk['satuan_bahan'])[$index] ?></span>
                                                         </td>
                                                     </tr>
                                                 <?php endforeach ?>
