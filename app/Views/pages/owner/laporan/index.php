@@ -4,15 +4,26 @@
 
 <div class="w-full mx-auto mb-6">
     <div class="relative flex flex-col flex-auto min-w-0 p-4 overflow-hidden break-words border-0 shadow-blur rounded-2xl bg-white/80 bg-clip-border backdrop-blur-2xl backdrop-saturate-200">
-        <div class="flex flex-col-reverse md:flex-row! gap-4 flex-wrap justify-between items-center">
-            <div class="w-full max-w-full mr-auto mt-4 sm:my-auto sm:mr-0 md:w-1/2 md:flex-none lg:w-4/12">
+        <div class="flex gap-4 justify-between items-center">
+            <div class="hidden lg:block w-full max-w-full mr-auto mt-4 sm:my-auto sm:mr-0 md:flex-none lg:w-max!">
                 <div class="flex">
                     <a href="/owner/laporan?periode=harian" class="flex-1 inline-block px-6 py-2 font-bold text-center uppercase align-middle transition-all rounded-l-lg cursor-pointer text-white <?= $periode == 'harian' ? 'bg-slate-700!' : 'bg-white! border border-slate-200! text-slate-600!' ?> leading-pro text-xs ease-soft-in tracking-tight-soft bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs">Harian</a>
                     <a href="/owner/laporan?periode=mingguan" class="flex-1 inline-block px-6 py-2 font-bold text-center uppercase align-middle transition-all cursor-pointer text-white <?= $periode == 'mingguan' ? 'bg-slate-700!' : 'bg-white! border border-slate-200! text-slate-600!' ?> leading-pro text-xs ease-soft-in tracking-tight-soft bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs">Mingguan</a>
-                    <a href="/owner/laporan?periode=bulanan" class="flex-1 inline-block px-6 py-2 font-bold text-center uppercase align-middle transition-all rounded-r-lg cursor-pointer text-white <?= $periode == 'bulanan' ? 'bg-slate-700!' : 'bg-white! border border-slate-200! text-slate-600!' ?> leading-pro text-xs ease-soft-in tracking-tight-soft bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs">Bulanan</a>
+                    <a href="/owner/laporan?periode=bulanan" class="flex-1 inline-block px-6 py-2 font-bold text-center uppercase align-middle transition-all cursor-pointer text-white <?= $periode == 'bulanan' ? 'bg-slate-700!' : 'bg-white! border border-slate-200! text-slate-600!' ?> leading-pro text-xs ease-soft-in tracking-tight-soft bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs">Bulanan</a>
+                    <a href="/owner/laporan?periode=bulan-lalu" class="flex-1 inline-block px-6 py-2 font-bold text-center uppercase align-middle transition-all rounded-r-lg cursor-pointer text-white text-nowrap <?= $periode == 'bulan-lalu' ? 'bg-slate-700!' : 'bg-white! border border-slate-200! text-slate-600!' ?> leading-pro text-xs ease-soft-in tracking-tight-soft bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs">Bulan Lalu</a>
                 </div>
             </div>
-            <div class="flex-none w-full md:w-auto! max-w-full md:px-3 my-auto mt-4 md:my-0!">
+            <div class="w-full max-w-full md:w-auto! lg:hidden mr-auto mt-4 sm:my-auto sm:mr-0 md:w-1/2 md:flex-none">
+                <label for="" class="text-sm mb-1 md:hidden!">Periode</label>
+                <select name="" id="periode_filter" class="w-full md:w-max focus:shadow-soft-primary-outline text-sm leading-5.6 ease-soft block rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-fuchsia-300 focus:outline-none">
+                    <option <?= $periode == 'harian' ? 'selected' : '' ?> value="/owner/laporan?periode=harian">Harian</option>
+                    <option <?= $periode == 'mingguan' ? 'selected' : '' ?> value="/owner/laporan?periode=mingguan">Mingguan</option>
+                    <option <?= $periode == 'bulanan' ? 'selected' : '' ?> value="/owner/laporan?periode=bulanan">Bulanan</option>
+                    <option <?= $periode == 'bulan-lalu' ? 'selected' : '' ?> value="/owner/laporan?periode=bulan-lalu">Bulan Lalu</option>
+                </select>
+            </div>
+            <div class="w-full md:w-auto! max-w-full my-auto mt-4 md:my-0!">
+                <label for="" class="text-sm mb-1 md:hidden!">Produk</label>
                 <div class="h-full flex items-center gap-3">
                     <select name="" id="produk_id" class="w-full md:w-max focus:shadow-soft-primary-outline text-sm leading-5.6 ease-soft block rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-fuchsia-300 focus:outline-none">
                         <option value="">Semua</option>
@@ -20,10 +31,11 @@
                             <option value="<?= $p['id_produk'] ?>" <?= $p['id_produk'] == $produk_id ? 'selected' : '' ?>><?= $p['nama_produk'] ?></option>
                         <?php endforeach; ?>
                     </select>
-                    <a href="/owner/laporan/cetak?periode=<?= $periode ?>&produk_id=<?= $produk_id ?>" class="w-full md:w-max! shrink-0 hidden md:inline-block! px-4 py-2.5 mr-3 font-bold text-center uppercase align-middle transition-all bg-transparent border rounded-lg cursor-pointer border-slate-300! leading-pro text-xs ease-soft-in tracking-tight-soft bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs text-slate-600">Export PDF</a>
+                    <a href="/owner/laporan/cetak?periode=<?= $periode ?>&produk_id=<?= $produk_id ?>" class="w-full md:w-max! shrink-0 hidden md:inline-block! px-4 py-2.5 font-bold text-center uppercase align-middle transition-all bg-transparent border rounded-lg cursor-pointer border-slate-300! leading-pro text-xs ease-soft-in tracking-tight-soft bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs text-slate-600">Export PDF</a>
                 </div>
             </div>
         </div>
+        <a href="/owner/laporan/cetak?periode=<?= $periode ?>&produk_id=<?= $produk_id ?>" class="w-full md:w-max! mt-4 md:hidden shrink-0 px-4 py-2.5 mr-3 font-bold text-center uppercase align-middle transition-all bg-transparent border rounded-lg cursor-pointer border-slate-300! leading-pro text-xs ease-soft-in tracking-tight-soft bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs text-slate-600">Export PDF</a>
     </div>
 </div>
 
@@ -67,7 +79,7 @@
                         </div>
                         <div class="px-3 text-right basis-1/3">
                             <div class="inline-block w-12 h-12 text-center rounded-lg bg-gradient-to-tl bg-gradient-to-tl from-gray-900 to-slate-800 opacity-80">
-                                <i class="ni leading-none ni-world text-lg relative top-3.5 text-white"></i>
+                                <i class="fa-solid fa-chart-line text-lg relative top-3.5 text-white"></i>
                             </div>
                         </div>
                     </div>
@@ -138,7 +150,7 @@
                         </div>
                         <div class="px-3 text-right basis-1/3">
                             <div class="inline-block w-12 h-12 text-center rounded-lg bg-gradient-to-tl bg-gradient-to-tl from-gray-900 to-slate-800 opacity-80">
-                                <i class="ni leading-none ni-money-coins text-lg relative top-3.5 text-white"></i>
+                                <i class="fa-solid fa-table-columns text-lg relative top-3.5 text-white"></i>
                             </div>
                         </div>
                     </div>
@@ -161,7 +173,7 @@
                         </div>
                         <div class="px-3 text-right basis-1/3">
                             <div class="inline-block w-12 h-12 text-center rounded-lg bg-gradient-to-tl bg-gradient-to-tl from-gray-900 to-slate-800 opacity-80">
-                                <i class="ni leading-none ni-world text-lg relative top-3.5 text-white"></i>
+                                <i class="fa-solid fa-cart-plus text-lg relative top-3.5 text-white"></i>
                             </div>
                         </div>
                     </div>
@@ -184,7 +196,7 @@
                         </div>
                         <div class="px-3 text-right basis-1/3">
                             <div class="inline-block w-12 h-12 text-center rounded-lg bg-gradient-to-tl bg-gradient-to-tl from-gray-900 to-slate-800 opacity-80">
-                                <i class="ni leading-none ni-paper-diploma text-lg relative top-3.5 text-white"></i>
+                                <i class="fa-solid fa-money-bill-wheat text-lg relative top-3.5 text-white"></i>
                             </div>
                         </div>
                     </div>
@@ -207,7 +219,7 @@
                         </div>
                         <div class="px-3 text-right basis-1/3">
                             <div class="inline-block w-12 h-12 text-center rounded-lg bg-gradient-to-tl from-gray-900 to-slate-800 opacity-80 ">
-                                <i class="ni leading-none ni-cart text-lg relative top-3.5 text-white"></i>
+                                <i class="fa-solid fa-money-bill-1-wave text-lg relative top-3.5 text-white"></i>
                             </div>
                         </div>
                     </div>
@@ -216,7 +228,6 @@
         </div>
     </div>
 </div>
-
 
 <!-- cards row 4 -->
 
@@ -404,6 +415,12 @@
         document.getElementById('produk_id').addEventListener('change', function() {
             const produkId = this.value;
             const url = '/owner/laporan?produk_id=' + produkId + '&periode=' + periode;
+            window.location.href = url;
+        });
+
+        document.getElementById('periode_filter').addEventListener('change', function() {
+            const periodeValue = this.value;
+            const url = periodeValue;
             window.location.href = url;
         });
     });

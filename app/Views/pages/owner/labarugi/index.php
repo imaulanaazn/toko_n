@@ -4,16 +4,34 @@
 
 <div class="w-full mx-auto mb-6">
     <div class="relative flex flex-col flex-auto min-w-0 p-4 overflow-hidden break-words border-0 shadow-blur rounded-2xl bg-white/80 bg-clip-border backdrop-blur-2xl backdrop-saturate-200">
-        <div class="flex flex-col-reverse md:flex-row! gap-4 flex-wrap justify-between items-center">
-            <div class="w-full max-w-full mr-auto mt-4 sm:my-auto sm:mr-0 md:w-1/2 md:flex-none lg:w-4/12">
+        <div class="flex gap-4 justify-between items-center">
+            <div class="hidden lg:block w-full max-w-full mr-auto mt-4 sm:my-auto sm:mr-0 md:flex-none lg:w-max!">
                 <div class="flex">
                     <a href="/owner/labarugi?periode=harian" class="flex-1 inline-block px-6 py-2 font-bold text-center uppercase align-middle transition-all rounded-l-lg cursor-pointer text-white <?= $periode == 'harian' ? 'bg-slate-700!' : 'bg-white! border border-slate-200! text-slate-600!' ?> leading-pro text-xs ease-soft-in tracking-tight-soft bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs">Harian</a>
                     <a href="/owner/labarugi?periode=mingguan" class="flex-1 inline-block px-6 py-2 font-bold text-center uppercase align-middle transition-all cursor-pointer text-white <?= $periode == 'mingguan' ? 'bg-slate-700!' : 'bg-white! border border-slate-200! text-slate-600!' ?> leading-pro text-xs ease-soft-in tracking-tight-soft bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs">Mingguan</a>
-                    <a href="/owner/labarugi?periode=bulanan" class="flex-1 inline-block px-6 py-2 font-bold text-center uppercase align-middle transition-all rounded-r-lg cursor-pointer text-white <?= $periode == 'bulanan' ? 'bg-slate-700!' : 'bg-white! border border-slate-200! text-slate-600!' ?> leading-pro text-xs ease-soft-in tracking-tight-soft bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs">Bulanan</a>
+                    <a href="/owner/labarugi?periode=bulanan" class="flex-1 inline-block px-6 py-2 font-bold text-center uppercase align-middle transition-all cursor-pointer text-white <?= $periode == 'bulanan' ? 'bg-slate-700!' : 'bg-white! border border-slate-200! text-slate-600!' ?> leading-pro text-xs ease-soft-in tracking-tight-soft bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs">Bulanan</a>
+                    <a href="/owner/labarugi?periode=bulan-lalu" class="flex-1 inline-block px-6 py-2 font-bold text-center uppercase align-middle transition-all rounded-r-lg cursor-pointer text-white text-nowrap <?= $periode == 'bulan-lalu' ? 'bg-slate-700!' : 'bg-white! border border-slate-200! text-slate-600!' ?> leading-pro text-xs ease-soft-in tracking-tight-soft bg-150 bg-x-25 hover:scale-102 active:opacity-85 hover:shadow-soft-xs">Bulan Lalu</a>
                 </div>
             </div>
-            <div class="flex-none w-full md:w-auto! max-w-full px-3 my-auto mt-4 md:my-0!">
-                <div class="h-full flex items-center gap-6">
+            <div class="w-full max-w-full md:w-auto! lg:hidden mr-auto mt-4 sm:my-auto sm:mr-0 md:w-1/2 md:flex-none">
+                <label for="" class="text-sm mb-1.5 md:hidden! flex items-center justify-between">
+                    <span>Periode</span>
+                    <span>
+                        <?= date('d/m/Y', strtotime($start)) ?>
+                        <?php if (date('d/m/Y', strtotime($start)) != date('d/m/Y', strtotime($end))) : ?>
+                            <span class="mx-1">-</span> <?= date('d/m/Y', strtotime($end)) ?>
+                        <?php endif ?></label>
+                </span>
+                <select name="" id="periode_filter" class="w-full md:w-max focus:shadow-soft-primary-outline text-sm leading-5.6 ease-soft block rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-fuchsia-300 focus:outline-none">
+                    <option value="/owner/labarugi?periode=harian" <?= $periode == 'harian' ? 'selected' : '' ?>>Harian</option>
+                    <option value="/owner/labarugi?periode=mingguan" <?= $periode == 'mingguan' ? 'selected' : '' ?>>Mingguan</option>
+                    <option value="/owner/labarugi?periode=bulanan" <?= $periode == 'bulanan' ? 'selected' : '' ?>>Bulanan</option>
+                    <option value="/owner/labarugi?periode=bulan-lalu" <?= $periode == 'bulan-lalu' ? 'selected' : '' ?>>Bulan Lalu</option>
+                </select>
+            </div>
+            <div class="w-full md:w-auto! max-w-full my-auto mt-4 md:my-0! hidden md:block">
+                <label for="" class="text-sm mb-1 md:hidden!">Tanggal</label>
+                <div class="h-full flex items-center gap-6 py-2 px-3">
                     <p class="mb-0 font-semibold leading-normal text-sm text-center">
                         <?= date('d/m/Y', strtotime($start)) ?>
                         <?php if (date('d/m/Y', strtotime($start)) != date('d/m/Y', strtotime($end))) : ?>
@@ -157,6 +175,11 @@
                     const url = '/owner/labarugi?produk_id=' + produkId + '&periode=' + periode;
                     window.location.href = url;
                 });
+            });
+            document.getElementById('periode_filter').addEventListener('change', function() {
+                const periodeValue = this.value;
+                const url = periodeValue;
+                window.location.href = url;
             });
         </script>
         <?= $this->endSection(); ?>

@@ -158,6 +158,11 @@ class Laporan extends BaseController
     private function getDateRange($periode)
     {
         switch ($periode) {
+            case 'bulan-lalu':
+                return [
+                    'start' => date('Y-m-d', strtotime('first day of last month')),
+                    'end'   => date('Y-m-d', strtotime('last day of last month')),
+                ];
             case 'mingguan':
                 return [
                     'start' => date('Y-m-d 00:00:00', strtotime('-7 days')),

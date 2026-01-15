@@ -39,6 +39,11 @@ class TrxPengeluaranModel extends Model
     public function getPengeluaranPaginated($periode = 'harian', $perPage = 10)
     {
         switch ($periode) {
+            case 'bulan-lalu':
+                $start = date('Y-m-d', strtotime('first day of last month'));
+                $end   = date('Y-m-d', strtotime('last day of last month'));
+                break;
+
             case 'mingguan':
                 $start = date('Y-m-d 00:00:00', strtotime('-7 days'));
                 $end   = date('Y-m-d 23:59:59');

@@ -82,42 +82,42 @@ defined('EXIT__AUTO_MAX')      || define('EXIT__AUTO_MAX', 125);    // highest a
 define('OWNER_MENU_ITEMS', [
     [
         'name' => 'Dashboard',
-        'icon' => '',
+        'icon' => 'fa-solid fa-chart-line',
         'url' =>  '/owner/dashboard',
         'has_submenu' => false,
         'sub_menu' => []
     ],
     [
         'name' => 'Pembelian',
-        'icon' => '',
+        'icon' => 'fa-solid fa-cart-plus',
         'url' =>  '/owner/pembelian',
         'has_submenu' => false,
         'sub_menu' => []
     ],
     [
         'name' => 'Penjualan',
-        'icon' => '',
+        'icon' => 'fa-solid fa-cart-arrow-down',
         'url' =>  '/owner/penjualan',
         'has_submenu' => false,
         'sub_menu' => []
     ],
     [
         'name' => 'Produk',
-        'icon' => '',
+        'icon' => 'fa-solid fa-boxes-stacked',
         'url' =>  '/owner/produk',
         'has_submenu' => false,
         'sub_menu' => []
     ],
     [
         'name' => 'Laba Rugi',
-        'icon' => '',
+        'icon' => 'fa-solid fa-chart-line',
         'url' =>  '/owner/labarugi',
         'has_submenu' => false,
         'sub_menu' => []
     ],
     [
         'name' => 'Laporan',
-        'icon' => '',
+        'icon' => 'fa-solid fa-file-invoice-dollar',
         'url' =>  '/owner/laporan',
         'has_submenu' => false,
         'sub_menu' => []
@@ -128,21 +128,21 @@ define('OWNER_MENU_ITEMS', [
 define('KARYAWAN_MENU_ITEMS', [
     [
         'name' => 'Dashboard',
-        'icon' => '',
+        'icon' => 'fa-solid fa-chart-line',
         'url' =>  '/karyawan/dashboard',
         'has_submenu' => false,
         'sub_menu' => []
     ],
     [
         'name' => 'Pembelian',
-        'icon' => '',
+        'icon' => 'fa-solid fa-cart-plus',
         'url' =>  '/karyawan/pembelian',
         'has_submenu' => false,
         'sub_menu' => []
     ],
     [
         'name' => 'Penjualan',
-        'icon' => '',
+        'icon' => 'fa-solid fa-cart-arrow-down',
         'url' =>  '/karyawan/penjualan',
         'has_submenu' => false,
         'sub_menu' => []
