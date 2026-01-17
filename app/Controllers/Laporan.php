@@ -19,120 +19,166 @@ class Laporan extends BaseController
         return view('pages/owner/laporan/index', $data);
     }
 
-    public function cetak_pdf()
+    public function cetak_pdf_ringkasan()
     {
         $periode = $this->request->getGet('periode') ?? 'harian';
-        $daftarProduk = $this->produkModel->findAll();
         $produkId = $this->request->getGet('produk_id') ?? '';
 
-        $data = $this->getLaporanData($periode, $produkId);
-        $data['daftarProduk'] = $daftarProduk;
+        $range = $this->getDateRange($periode);
+        $start = $range['start'];
+        $end   = $range['end'];
 
-        return view('pages/owner/laporan/template_pdf', $data);
+        // 1. Ambil Data Finansial
+        $totalPengeluaran = $this->calculateTotalPengeluaran($start, $end);
+        $totalPenjualan   = $this->calculateTotalPenjualan($start, $end, $produkId);
+        $totalHPP         = $this->calculateTotalHPP($start, $end, $produkId);
+
+        // 2. Hitung Profit (Logic ini diletakkan di variabel agar bersih)
+        $labaKotor  = $totalPenjualan - $totalHPP;
+        $labaBersih = $labaKotor - $totalPengeluaran;
+
+        // 3. Ambil Data Statistik Transaksi
+        $stats = $this->getTransactionStats($start, $end, $produkId);
+        return view('pages/owner/laporan/template_pdf_ringkasan', [
+            'periode'            => $periode,
+            'start'              => $start,
+            'end'                => $end,
+            'totalPengeluaran'   => $totalPengeluaran,
+            'totalProdukTerjual' => $stats['totalProdukTerjual'],
+            'totalPenjualan'     => $totalPenjualan,
+            'totalHPP'           => $totalHPP,
+            'labaKotor'          => $labaKotor,
+            'labaBersih'         => $labaBersih,
+            'totalTransaksi'     => $stats['totalTransaksi'],
+            'rataRataTransaksi'  => $stats['rataRata'],
+            'totalOperasional'   => $this->getTotalOperasional($start, $end),
+        ]);
+    }
+
+    public function cetak_pdf_penjualan()
+    {
+        $periode = $this->request->getGet('periode') ?? 'harian';
+        $produkId = $this->request->getGet('produk_id') ?? '';
+        $range = $this->getDateRange($periode);
+        $start = $range['start'];
+        $end   = $range['end'];
+
+        return view('pages/owner/laporan/template_pdf_penjualan', [
+            'periode' => $periode,
+            'produk_id' => $produkId,
+            'dataPenjualan' => $this->penjualanModel->getPenjualanData($periode, $produkId),
+            'start' => $start,
+            'end' => $end,
+        ]);
+    }
+
+    public function cetak_pdf_pengeluaran()
+    {
+        $periode = $this->request->getGet('periode') ?? 'harian';
+        $produkId = $this->request->getGet('produk_id') ?? '';
+        $range = $this->getDateRange($periode);
+        $start = $range['start'];
+        $end   = $range['end'];
+
+        return view('pages/owner/laporan/template_pdf_pengeluaran', [
+            'periode' => $periode,
+            'produk_id' => $produkId,
+            'dataPengeluaran' => $this->trxPengeluaranModel->getPengeluaranData($periode, $produkId),
+            'start' => $start,
+            'end' => $end,
+        ]);
     }
 
     private function getLaporanData($periode, $produkId = null)
     {
-        // Tentukan rentang tanggal
         $range = $this->getDateRange($periode);
-
         $start = $range['start'];
         $end   = $range['end'];
 
-        // ===========================
-        // 1. Total Pengeluaran (operasional, gaji, dll)
-        // ===========================
-        $totalPengeluaran = $this->trxPengeluaranModel
-            ->where("tanggal_pengeluaran >=", $start)
-            ->where("tanggal_pengeluaran <=", $end)
-            ->selectSum("total_harga")
-            ->first()['total_harga'] ?? 0;
+        // 1. Ambil Data Finansial
+        $totalPengeluaran = $this->calculateTotalPengeluaran($start, $end);
+        $totalPenjualan   = $this->calculateTotalPenjualan($start, $end, $produkId);
+        $totalHPP         = $this->calculateTotalHPP($start, $end, $produkId);
 
-        $totalOperasional = $this->getTotalOperasional($start, $end);
-
-        // ===========================
-        // 2. Total Produk Terjual
-        // ===========================
-        $totalProdukTerjual = $this->penjualanProdukModel
-            ->where("tanggal >=", $start)
-            ->where("tanggal <=", $end)
-            ->when(!empty($produkId), fn($q) => $q->where('id_produk', $produkId))
-            ->selectSum('jumlah')
-            ->first()['jumlah'] ?? 0;
-
-        $totalTransaksi = $this->penjualanProdukModel
-            ->select('id_penjualan')
-            ->where('tanggal >=', $start)
-            ->where('tanggal <=', $end)
-            ->when(!empty($produkId), fn($q) => $q->where('id_produk', $produkId))
-            ->distinct()
-            ->countAllResults();
-
-        $rataRataTransaksi = $totalTransaksi;
-        $daysCount = (strtotime($end) - strtotime($start)) / 86400;
-
-        $rataRataTransaksi = $totalTransaksi / $daysCount;
-
-        // ===========================
-        // 3. Total Penjualan (Omset)
-        // ===========================
-        $totalPenjualan = $this->penjualanProdukModel
-            ->where("tanggal >=", $start)
-            ->where("tanggal <=", $end)
-            ->when(!empty($produkId), fn($q) => $q->where('id_produk', $produkId))
-            ->selectSum('total')
-            ->first()['total'] ?? 0;
-
-        // ===========================
-        // 4. Total HPP
-        // ===========================
-        // asumsi setiap produk sudah memiliki field 'hpp'
-        $penjualanData = $this->penjualanProdukModel
-            ->where("tanggal >=", $start)
-            ->where("tanggal <=", $end)
-            ->when(!empty($produkId), fn($q) => $q->where('id_produk', $produkId))
-            ->findAll();
-
-        $totalHPP = 0;
-
-        foreach ($penjualanData as $trx) {
-            $totalHPP += $this->hppService->hitungHPP($trx['id_produk']) * $trx['jumlah'];
-        }
-
-        // ===========================
-        // 5. Laba Kotor
-        // ===========================
-        $labaKotor = $totalPenjualan - $totalHPP;
-
-        // ===========================
-        // 6. Laba Bersih
-        // ===========================
+        // 2. Hitung Profit (Logic ini diletakkan di variabel agar bersih)
+        $labaKotor  = $totalPenjualan - $totalHPP;
         $labaBersih = $labaKotor - $totalPengeluaran;
 
-        $penjualanPaginated = $this->penjualanModel->getPenjualanPaginated($periode, 10, $produkId);
-        $penjualanPager     = $this->penjualanModel->pager;
-
-        $pengeluaranPaginated = $this->trxPengeluaranModel->getPengeluaranPaginated($periode, 10);
-        $pengeluaranPager     = $this->trxPengeluaranModel->pager;
+        // 3. Ambil Data Statistik Transaksi
+        $stats = $this->getTransactionStats($start, $end, $produkId);
 
         return [
             'periode'            => $periode,
             'start'              => $start,
             'end'                => $end,
             'totalPengeluaran'   => $totalPengeluaran,
-            'totalProdukTerjual' => $totalProdukTerjual,
+            'totalProdukTerjual' => $stats['totalProdukTerjual'],
             'totalPenjualan'     => $totalPenjualan,
             'totalHPP'           => $totalHPP,
             'labaKotor'          => $labaKotor,
             'labaBersih'         => $labaBersih,
-            'totalTransaksi'     => $totalTransaksi,
-            'rataRataTransaksi'  => $rataRataTransaksi,
-            'totalOperasional'   => $totalOperasional,
-            'dataPenjualan'      => $penjualanPaginated,
-            'penjualanPager'     => $penjualanPager,
-            'dataPengeluaran'    => $pengeluaranPaginated,
-            'pengeluaranPager'   => $pengeluaranPager,
+            'totalTransaksi'     => $stats['totalTransaksi'],
+            'rataRataTransaksi'  => $stats['rataRata'],
+            'totalOperasional'   => $this->getTotalOperasional($start, $end),
+            'dataPenjualan'      => $this->penjualanModel->getPenjualanPaginated($periode, 10, $produkId),
+            'penjualanPager'     => $this->penjualanModel->pager,
+            'dataPengeluaran'    => $this->trxPengeluaranModel->getPengeluaranPaginated($periode, 10),
+            'pengeluaranPager'   => $this->trxPengeluaranModel->pager,
             'produk_id'          => $produkId
+        ];
+    }
+
+    // --- Helper Methods ---
+
+    private function calculateTotalPengeluaran($start, $end)
+    {
+        return $this->trxPengeluaranModel
+            ->where("tanggal_pengeluaran >=", $start)
+            ->where("tanggal_pengeluaran <=", $end)
+            ->selectSum("total_harga")
+            ->first()['total_harga'] ?? 0;
+    }
+
+    private function calculateTotalPenjualan($start, $end, $produkId)
+    {
+        return $this->penjualanProdukModel
+            ->where("tanggal >=", $start)
+            ->where("tanggal <=", $end)
+            ->when(!empty($produkId), fn($q) => $q->where('id_produk', $produkId))
+            ->selectSum('total')
+            ->first()['total'] ?? 0;
+    }
+
+    private function calculateTotalHPP($start, $end, $produkId)
+    {
+        $penjualanData = $this->penjualanProdukModel
+            ->where("tanggal >=", $start)
+            ->where("tanggal <=", $end)
+            ->when(!empty($produkId), fn($q) => $q->where('id_produk', $produkId))
+            ->findAll();
+
+        return array_reduce($penjualanData, function ($carry, $trx) {
+            return $carry + ($this->hppService->hitungHPP($trx['id_produk']) * $trx['jumlah']);
+        }, 0);
+    }
+
+    private function getTransactionStats($start, $end, $produkId)
+    {
+        $query = $this->penjualanProdukModel
+            ->where("tanggal >=", $start)
+            ->where("tanggal <=", $end)
+            ->when(!empty($produkId), fn($q) => $q->where('id_produk', $produkId));
+
+        $totalProdukTerjual = (clone $query)->selectSum('jumlah')->first()['jumlah'] ?? 0;
+        $totalTransaksi     = (clone $query)->distinct()->countAllResults('id_penjualan');
+
+        $daysCount = (strtotime($end) - strtotime($start)) / 86400;
+        $rataRata  = $daysCount > 0 ? $totalTransaksi / $daysCount : 0;
+
+        return [
+            'totalProdukTerjual' => $totalProdukTerjual,
+            'totalTransaksi'     => $totalTransaksi,
+            'rataRata'           => $rataRata
         ];
     }
 

@@ -40,9 +40,8 @@ class PenjualanModel extends Model
             ->getResultArray();
     }
 
-    public function getPenjualanPaginated($periode = 'harian', $perPage = 10, $produkId = null)
+    private function getDate($periode)
     {
-        // Tentukan rentang tanggal
         switch ($periode) {
             case 'bulan-lalu':
                 $start = date('Y-m-d', strtotime('first day of last month'));
@@ -64,6 +63,16 @@ class PenjualanModel extends Model
                 $end   = date('Y-m-d 23:59:59');
                 break;
         }
+        return [
+            'start' => $start,
+            'end'   => $end,
+        ];
+    }
+
+    public function getPenjualanPaginated($periode = 'harian', $perPage = 10, $produkId = null)
+    {
+        // Tentukan rentang tanggal
+        $date = $this->getDate($periode);
 
         return $this->select("
             penjualan.*,
@@ -77,11 +86,36 @@ class PenjualanModel extends Model
             ->join("penjualan_produk", "penjualan_produk.id_penjualan = penjualan.id_penjualan", "left")
             ->join("produk", "produk.id_produk = penjualan_produk.id_produk", "right")
             ->join("promo", "produk.id_promo = promo.id_promo", "left")
-            ->where("penjualan.tanggal >=", $start)
-            ->where("penjualan.tanggal <=", $end)
+            ->where("penjualan.tanggal >=", $date['start'])
+            ->where("penjualan.tanggal <=", $date['end'])
             ->when(!empty($produkId), fn($q) => $q->where('produk.id_produk', $produkId))
             ->groupBy("penjualan.id_penjualan")
             ->orderBy("penjualan.tanggal", "DESC")
-            ->paginate($perPage, 'penjualan');
+            ->paginate($perPage, 'penjualan'); //doesn't  have to be paginated (conditional)
+    }
+
+    public function getPenjualanData($periode = 'harian', $produkId = null)
+    {
+        // Tentukan rentang tanggal
+        $date = $this->getDate($periode);
+
+        return $this->select("
+            penjualan.*,
+            GROUP_CONCAT(produk.nama_produk SEPARATOR '|') AS produk_list,
+            GROUP_CONCAT(penjualan_produk.jumlah SEPARATOR '|') AS jumlah_list,
+            GROUP_CONCAT(penjualan_produk.subtotal SEPARATOR '|') AS subtotal_list,
+            GROUP_CONCAT(penjualan_produk.total SEPARATOR '|') AS total_list,
+            GROUP_CONCAT(penjualan_produk.harga_satuan SEPARATOR '|') AS harga_satuan_list,
+            GROUP_CONCAT(penjualan_produk.diskon SEPARATOR '|') AS diskon_list,
+        ")
+            ->join("penjualan_produk", "penjualan_produk.id_penjualan = penjualan.id_penjualan", "left")
+            ->join("produk", "produk.id_produk = penjualan_produk.id_produk", "right")
+            ->join("promo", "produk.id_promo = promo.id_promo", "left")
+            ->where("penjualan.tanggal >=", $date['start'])
+            ->where("penjualan.tanggal <=", $date['end'])
+            ->when(!empty($produkId), fn($q) => $q->where('produk.id_produk', $produkId))
+            ->groupBy("penjualan.id_penjualan")
+            ->orderBy("penjualan.tanggal", "DESC")
+            ->findAll();
     }
 }

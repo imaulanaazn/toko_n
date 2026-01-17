@@ -36,7 +36,7 @@ class TrxPengeluaranModel extends Model
             ->findAll();
     }
 
-    public function getPengeluaranPaginated($periode = 'harian', $perPage = 10)
+    private function getDate($periode)
     {
         switch ($periode) {
             case 'bulan-lalu':
@@ -59,12 +59,30 @@ class TrxPengeluaranModel extends Model
                 $end   = date('Y-m-d 23:59:59');
                 break;
         }
+        return [
+            'start' => $start,
+            'end'   => $end,
+        ];
+    }
 
+    public function getPengeluaranPaginated($periode = 'harian', $perPage = 10)
+    {
+        $date = $this->getDate($periode);
         return $this->select('trx_pengeluaran.*, pengeluaran.nama_pengeluaran AS nama_master, pengeluaran.satuan, pengeluaran.kategori')
             ->join('pengeluaran', 'pengeluaran.id_pengeluaran = trx_pengeluaran.id_pengeluaran')
-            ->where('tanggal_pengeluaran >=', $start)
-            ->where('tanggal_pengeluaran <=', $end)
+            ->where('tanggal_pengeluaran >=', $date['start'])
+            ->where('tanggal_pengeluaran <=', $date['end'])
             ->orderBy('tanggal_pengeluaran', 'DESC')
             ->paginate($perPage, 'pengeluaran');
+    }
+
+    public function getPengeluaranData($periode = 'harian')
+    {
+        $date = $this->getDate($periode);
+        return $this->select('trx_pengeluaran.*, pengeluaran.nama_pengeluaran AS nama_master, pengeluaran.satuan, pengeluaran.kategori')
+            ->join('pengeluaran', 'pengeluaran.id_pengeluaran = trx_pengeluaran.id_pengeluaran')
+            ->where('tanggal_pengeluaran >=', $date['start'])
+            ->where('tanggal_pengeluaran <=', $date['end'])
+            ->orderBy('tanggal_pengeluaran', 'DESC')->findAll();
     }
 }
