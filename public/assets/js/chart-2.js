@@ -23,7 +23,7 @@ new Chart(ctx2, {
         label: "Total Penjualan",
         tension: 0.3,
         pointRadius: 0,
-        borderColor: "#cb0c9f",
+        borderColor: "#f39f3fff",
         borderWidth: 3,
         backgroundColor: gradientStroke1,
         fill: true,
@@ -34,18 +34,18 @@ new Chart(ctx2, {
         label: "Total Pembelian",
         tension: 0.3,
         pointRadius: 0,
-        borderColor: "#3A416F",
+        borderColor: "#7a83f3ff",
         borderWidth: 3,
         backgroundColor: gradientStroke2,
         fill: true,
         data: chartPengeluaran,
         maxBarThickness: 6,
       },
-       {
+      {
         label: "Laba Rugi",
         tension: 0.3,
         pointRadius: 0,
-        borderColor: "#828bcaff",
+        borderColor: "#31f0b6ff",
         borderWidth: 3,
         backgroundColor: gradientStroke2,
         fill: true,
@@ -60,7 +60,7 @@ new Chart(ctx2, {
     plugins: {
       legend: {
         display: true,
-        position: "bottom"
+        position: "bottom",
       },
     },
     interaction: {
